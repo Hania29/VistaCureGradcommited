@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="250dp"
+    android:height="250dp"
+    android:viewportWidth="250"
+    android:viewportHeight="250">
+  <group>
+    <clip-path
+        android:pathData="M0,0h250v250h-250z"/>
+    <path
+        android:pathData="M125,189.1C159.98,189.1 188.34,160.74 188.34,125.76C188.34,90.78 159.98,62.43 125,62.43C90.03,62.43 61.67,90.78 61.67,125.76C61.67,160.74 90.03,189.1 125,189.1Z"
+        android:fillColor="#3B97D3"/>
+    <path
+        android:pathData="M15.01,51.67H0.01V0H51.67V15H15.01V51.67Z"
+        android:fillColor="#055B7F"/>
+    <path
+        android:pathData="M250.01,51.67H235.01V15H198.34V0H250.01V51.67Z"
+        android:fillColor="#055B7F"/>
+    <path
+        android:pathData="M250.01,250H198.34V235H235.01V198.34H250.01V250Z"
+        android:fillColor="#055B7F"/>
+    <path
+        android:pathData="M51.67,250H0.01V198.34H15.01V235H51.67V250Z"
+        android:fillColor="#055B7F"/>
+    <path
+        android:pathData="M156.19,29.12C146,26.5 135.52,25.11 124.99,24.99C114.47,25.11 103.99,26.5 93.79,29.12C72.76,34.63 53.32,44.99 37.03,59.39C20.74,73.78 8.05,91.8 -0.01,111.99L18.54,119.44C25.43,102.17 36.27,86.75 50.2,74.42C64.13,62.1 80.76,53.22 98.74,48.49C107.32,46.29 116.14,45.12 124.99,44.99C133.85,45.12 142.66,46.29 151.24,48.49C169.23,53.22 185.86,62.1 199.79,74.42C213.72,86.75 224.56,102.17 231.45,119.44L249.99,111.99C241.94,91.8 229.25,73.78 212.96,59.39C196.67,44.99 177.23,34.63 156.19,29.12Z"
+        android:fillColor="#77787C"
+        android:fillAlpha="0.14"/>
+    <path
+        android:pathData="M126.23,151.46C141.27,151.46 153.46,139.27 153.46,124.23C153.46,109.19 141.27,97 126.23,97C111.19,97 99,109.19 99,124.23C99,139.27 111.19,151.46 126.23,151.46Z"
+        android:fillColor="#055B7F"/>
+    <path
+        android:pathData="M138,104.5C138,108.64 141.36,112 145.5,112C149.64,112 153,108.64 153,104.5C153,100.36 149.64,97 145.5,97C141.36,97 138,100.36 138,104.5Z"
+        android:fillColor="#ffffff"/>
+  </group>
+</vector>

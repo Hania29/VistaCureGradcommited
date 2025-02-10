@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/firstFragment">
+
+    <fragment
+        android:id="@+id/firstFragment"
+        android:name="com.example.vistacuregrad.Mainactivity.FirstFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_first" >
+        <action
+            android:id="@+id/action_firstFragment_to_introFragment"
+            app:destination="@id/introFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fourthFragment"
+        android:name="com.example.vistacuregrad.Mainactivity.FourthFragment"
+        android:label="fragment_fourth"
+        tools:layout="@layout/fragment_fourth">
+        <action
+            android:id="@+id/action_fourthFragment_to_seventhFragment"
+            app:destination="@id/seventhFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fifthFragment"
+        android:name="com.example.vistacuregrad.Mainactivity.FifthFragment"
+        android:label="fragment_fifth"
+        tools:layout="@layout/fragment_fifth" >
+        <action
+            android:id="@+id/action_fifthFragment_to_resetPass"
+            app:destination="@id/resetPass" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/sixthFragment"
+        android:name="com.example.vistacuregrad.Mainactivity.SixthFragment"
+        android:label="fragment_sixth"
+        tools:layout="@layout/fragment_sixth" >
+        <action
+            android:id="@+id/action_sixthFragment_to_userProfile"
+            app:destination="@id/userProfile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/seventhFragment"
+        android:name="com.example.vistacuregrad.Mainactivity.SeventhFragment"
+        android:label="fragment_seventh"
+        tools:layout="@layout/fragment_seventh" >
+        <action
+            android:id="@+id/action_seventhFragment_to_fifthFragment"
+            app:destination="@id/fifthFragment" />
+        <action
+            android:id="@+id/action_seventhFragment_to_fourthFragment"
+            app:destination="@id/fourthFragment" />
+        <action
+            android:id="@+id/action_seventhFragment_to_sixthFragment"
+            app:destination="@id/sixthFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/introFragment"
+        android:name="com.example.vistacuregrad.Mainactivity.IntroFragment"
+        android:label="fragment_intro"
+        tools:layout="@layout/fragment_intro" >
+        <action
+            android:id="@+id/action_introFragment_to_seventhFragment"
+            app:destination="@id/seventhFragment" />
+        <action
+            android:id="@+id/action_introFragment_to_fourthFragment"
+            app:destination="@id/fourthFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userProfile"
+        android:name="com.example.vistacuregrad.Mainactivity.UserProfile"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/action_userProfile_to_medicalHistory"
+            app:destination="@id/medicalHistory" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/medicalHistory"
+        android:name="com.example.vistacuregrad.Mainactivity.MedicalHistory"
+        android:label="fragment_medical_history"
+        tools:layout="@layout/fragment_medical_history" >
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/resetPass"
+        android:name="com.example.vistacuregrad.Mainactivity.ResetPass"
+        android:label="fragment_reset_pass"
+        tools:layout="@layout/fragment_reset_pass">
+        <deepLink
+            android:id="@+id/deepLink_resetPass"
+            app:uri="https://www.yourdomain.com/resetpassword" />
+    </fragment>
+
+
+</navigation>

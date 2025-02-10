@@ -1,0 +1,249 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/DarkBlueMainTitle">
+
+    <View
+        android:id="@+id/top_half"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="45dp"
+        android:background="@color/DarkBlueMainTitle"
+        app:layout_constraintBottom_toTopOf="@+id/tvAllergies"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/medicalHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Medical History "
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvAllergies"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="68dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/baseline_arrow_left_24"
+        android:contentDescription="Go back"
+        android:elevation="0dp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/bottom_half"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_bottom_background_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.9"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/medicalHistory"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/tvAllergies"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:text="Allergies "
+        android:textColor="@color/DarkBlueMainTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etAllergies"
+        app:layout_constraintStart_toStartOf="@+id/etAllergies" />
+
+    <EditText
+        android:id="@+id/etAllergies"
+        android:layout_width="350dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/rounded_edittext"
+        android:gravity="center_vertical"
+        android:hint="Your Allergies"
+        android:padding="12dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/etchronicconditions"
+        app:layout_constraintTop_toBottomOf="@+id/top_half" />
+
+    <TextView
+        android:id="@+id/tvchronicconditions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chronic Conditions "
+        android:textColor="@color/DarkBlueMainTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etchronicconditions"
+        app:layout_constraintStart_toStartOf="@+id/etchronicconditions" />
+
+    <EditText
+        android:id="@+id/etchronicconditions"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/rounded_edittext"
+        android:gravity="center_vertical"
+        android:hint="Your Chronic Conditions "
+        android:padding="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAllergies" />
+
+    <TextView
+        android:id="@+id/tvMedications"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:text="Medications"
+        android:textColor="@color/DarkBlueMainTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etmedications"
+        app:layout_constraintStart_toStartOf="@+id/etmedications"
+        app:layout_constraintTop_toBottomOf="@+id/etchronicconditions"
+        app:layout_constraintVertical_bias="0.864" />
+
+    <EditText
+        android:id="@+id/etmedications"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/rounded_edittext"
+        android:gravity="center_vertical"
+        android:hint="Your Medications"
+        android:padding="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etchronicconditions" />
+
+
+    <TextView
+        android:id="@+id/tvsurgeries"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:text="Your Surgeries"
+        android:textColor="@color/DarkBlueMainTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/etsurgeries"
+        app:layout_constraintStart_toStartOf="@+id/etsurgeries" />
+
+    <EditText
+        android:id="@+id/etsurgeries"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/rounded_edittext"
+        android:gravity="center_vertical"
+        android:hint="Your Surgeries"
+        android:padding="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etmedications" />
+
+    <TextView
+        android:id="@+id/tvfamilyhistory"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:text="Your Family History"
+        android:textColor="@color/DarkBlueMainTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/etfamilyhistory"
+        app:layout_constraintTop_toBottomOf="@+id/etsurgeries" />
+
+    <EditText
+        android:id="@+id/etfamilyhistory"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/rounded_edittext"
+        android:gravity="center_vertical"
+        android:hint="Your Family History "
+        android:padding="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etsurgeries" />
+
+
+    <TextView
+        android:id="@+id/tvlastcheckupdate"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginTop="16dp"
+        android:text="Your Last Checkup Date"
+        android:textColor="@color/DarkBlueMainTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/etcheckupdate"
+        app:layout_constraintTop_toBottomOf="@+id/etfamilyhistory" />
+
+    <EditText
+        android:id="@+id/etcheckupdate"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/rounded_edittext"
+        android:gravity="center_vertical"
+        android:hint="Day / Month / Year"
+        android:inputType="date"
+        android:padding="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etfamilyhistory" />
+
+    <Button
+        android:id="@+id/btndone"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:backgroundTint="@color/MedBlueBtnOutlineAndParagraph"
+        android:text="Done"
+        android:textColor="@color/BgAndOnBtnWhite"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_half"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etcheckupdate" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+
+
+

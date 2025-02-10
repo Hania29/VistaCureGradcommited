@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/DarkBlueMainTitle"
+        tools:context=".SixthFragment">
+
+        <View
+            android:id="@+id/top_half"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/DarkBlueMainTitle"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_half"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/bottom_half"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rounded_bottom_background_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_half" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            android:layout_width="68dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/baseline_arrow_left_24"
+            android:contentDescription="Go back"
+            android:elevation="0dp"
+            app:backgroundTint="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:layout_width="175dp"
+            android:layout_height="137dp"
+            android:layout_marginTop="58dp"
+            android:src="@drawable/secure_mail"
+            app:layout_constraintBottom_toTopOf="@+id/textView6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.205" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="96dp"
+            android:text="OTP Verification"
+            android:textColor="@color/white"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/textView7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:text="Enter the OTP sent to your email"
+            android:textColor="@color/DarkBlueMainTitle"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/otpLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/otpLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnOTP"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <EditText
+                android:id="@+id/otpDigit1"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/otp_box_outline"
+                android:gravity="center"
+                android:hint="_"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/otpDigit2"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/otp_box_outline"
+                android:gravity="center"
+                android:hint="_"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/otpDigit3"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/otp_box_outline"
+                android:gravity="center"
+                android:hint="_"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/otpDigit4"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/otp_box_outline"
+                android:gravity="center"
+                android:hint="_"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/otpDigit5"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/otp_box_outline"
+                android:gravity="center"
+                android:hint="_"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/otpDigit6"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/otp_box_outline"
+                android:gravity="center"
+                android:hint="_"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnOTP"
+            android:layout_width="303dp"
+            android:layout_height="73dp"
+            android:backgroundTint="@color/DarkBlueMainTitle"
+            android:text="Verify"
+            android:textColor="@color/BgAndOnBtnWhite"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

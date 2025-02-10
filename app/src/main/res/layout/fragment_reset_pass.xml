@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/DarkBlueMainTitle"
+        tools:context=".ResetPass">
+
+        <View
+            android:id="@+id/top_half"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/DarkBlueMainTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/bottom_half"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rounded_bottom_background_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_half" />
+
+
+        <ImageView
+            android:layout_width="270dp"
+            android:layout_height="182dp"
+            android:src="@drawable/rafiki2"
+            app:layout_constraintBottom_toBottomOf="@+id/top_half"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.675" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            android:layout_width="68dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/baseline_arrow_left_24"
+            android:contentDescription="Go back"
+            android:elevation="0dp"
+            app:backgroundTint="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="Password"
+            android:textColor="@color/DarkBlueMainTitle"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/etPass"
+            app:layout_constraintStart_toStartOf="@+id/etPass"
+            app:layout_constraintTop_toBottomOf="@+id/top_half"
+            app:layout_constraintVertical_bias="0.818" />
+
+        <EditText
+            android:id="@+id/etPass"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:gravity="center_vertical"
+            android:hint="Your Password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.508"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/ivTogglePass"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/hidden11"
+            app:layout_constraintBottom_toBottomOf="@+id/etPass"
+            app:layout_constraintEnd_toEndOf="@+id/etPass"
+            app:layout_constraintHorizontal_bias="0.956"
+            app:layout_constraintStart_toStartOf="@+id/etPass" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm Password"
+            android:textColor="@color/DarkBlueMainTitle"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/etConfirmPass"
+            app:layout_constraintStart_toStartOf="@+id/etPass" />
+
+        <EditText
+            android:id="@+id/etConfirmPass"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:gravity="center_vertical"
+            android:hint="Confirm Your Password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.508"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivToggleConfirmPass"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/hidden11"
+            app:layout_constraintBottom_toBottomOf="@+id/etConfirmPass"
+            app:layout_constraintEnd_toEndOf="@+id/etConfirmPass"
+            app:layout_constraintHorizontal_bias="0.956"
+            app:layout_constraintStart_toStartOf="@+id/etConfirmPass" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email Address"
+            android:textColor="@color/DarkBlueMainTitle"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/etemailaddress"
+            app:layout_constraintStart_toStartOf="@+id/etConfirmPass" />
+
+
+        <EditText
+            android:id="@+id/etemailaddress"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/rounded_edittext"
+            android:gravity="center_vertical"
+            android:hint="Your Email"
+            android:padding="12dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnDone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.508"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:backgroundTint="@color/DarkBlueMainTitle"
+            android:text="Done"
+            android:textColor="@color/BgAndOnBtnWhite"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

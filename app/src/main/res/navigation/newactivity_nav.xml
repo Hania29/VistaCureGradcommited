@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newactivity_nav"
+    app:startDestination="@id/homeFragment">
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.vistacuregrad.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_about"
+            app:destination="@id/about" />
+        <action
+            android:id="@+id/action_homeFragment_to_medicalDrawer"
+            app:destination="@id/medicalDrawer" />
+        <action
+            android:id="@+id/action_homeFragment_to_vcare"
+            app:destination="@id/vcare" />
+        <action
+            android:id="@+id/action_homeFragment_to_userDrawer"
+            app:destination="@id/userDrawer" />
+        <action
+            android:id="@+id/action_homeFragment_to_help"
+            app:destination="@id/help" />
+        <action
+            android:id="@+id/action_homeFragment_to_chatBotFragment"
+            app:destination="@id/chatBotFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDrawer"
+        android:name="com.example.vistacuregrad.UserDrawerFragment"
+        android:label="fragment_user_drawer"
+        tools:layout="@layout/fragment_user_drawer" />
+    <fragment
+        android:id="@+id/medicalDrawer"
+        android:name="com.example.vistacuregrad.MedicalDrawerFragment"
+        android:label="fragment_medical_drawer"
+        tools:layout="@layout/fragment_medical_drawer" />
+    <fragment
+        android:id="@+id/vcare"
+        android:name="com.example.vistacuregrad.VcareFragment"
+        android:label="fragment_vcare"
+        tools:layout="@layout/fragment_vcare" />
+    <fragment
+        android:id="@+id/about"
+        android:name="com.example.vistacuregrad.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/help"
+        android:name="com.example.vistacuregrad.HelpFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/chatBotFragment"
+        android:name="com.example.vistacuregrad.ChatBotFragment"
+        android:label="fragment_chat_bot"
+        tools:layout="@layout/fragment_chat_bot" >
+        <action
+            android:id="@+id/action_chatBotFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.vistacuregrad.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment_to_chatBotFragment"
+            app:destination="@id/chatBotFragment" />
+    </fragment>
+
+</navigation>

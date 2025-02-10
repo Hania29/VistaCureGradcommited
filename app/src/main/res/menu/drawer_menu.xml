@@ -1,0 +1,37 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/userDrawer"
+            android:icon="@drawable/userv"
+            android:title="User profile">
+        </item>
+
+
+        <item
+            android:id="@+id/medicalDrawer"
+            android:icon="@drawable/medicalhisory"
+            android:title="Medical history" />
+
+        <item
+            android:id="@+id/vcare"
+            android:icon="@drawable/vcare"
+            android:title="Vcare"
+    />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/about"
+                android:title="About" />
+
+            <item
+                android:id="@+id/help"
+                android:title="Help" />
+
+            <item
+                android:id="@+id/logout_drawer"
+                android:title="Log out" />
+        </menu>
+    </item>
+</menu>

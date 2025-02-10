@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DrawerItemTitleStyle">
+        <item name="android:textSize">24sp</item> <!-- Set the desired size -->
+        <item name="android:textColor">@color/drawer</item> <!-- Optional: Change text color -->
+    </style>
+
+</resources>
