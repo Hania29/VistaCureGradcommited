@@ -14,13 +14,16 @@ class RegisterViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _registerResponse = MutableLiveData<Response<RegisterResponse>>()
     val registerResponse: LiveData<Response<RegisterResponse>> get() = _registerResponse
 
-    fun registerUser(username: String, email: String, password: String) {
+    fun registerUser(username: String, password: String, email: String) {
         viewModelScope.launch {
             try {
-                val response = repository.registerUser(username, email, password)
+                val response = repository.registerUser(
+                    username = username,
+                    password = password,
+                    email = email
+                )
                 _registerResponse.postValue(response)
             } catch (e: Exception) {
-                // Handle exceptions and show errors in logs
                 e.printStackTrace()
             }
         }
