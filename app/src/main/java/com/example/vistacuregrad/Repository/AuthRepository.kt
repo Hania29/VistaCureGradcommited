@@ -8,6 +8,7 @@ import com.example.vistacuregrad.model.OtpResponse
 import com.example.vistacuregrad.model.RegisterResponse
 import com.example.vistacuregrad.network.ApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
@@ -43,9 +44,10 @@ class AuthRepository(private val apiService: ApiService) {
 
 
     suspend fun verifyOtp(code: String, token: String): Response<OtpResponse> {
+        val otpCodePart = code.toRequestBody("text/plain".toMediaTypeOrNull())
         Log.d("AautoRrepository", "code: $code | token: '$token'")
         return apiService.verifyOtp(
-            OtpRequest(code),
+            otpRequest = otpCodePart,
             token = token
         )
     }

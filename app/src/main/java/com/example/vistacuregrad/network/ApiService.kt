@@ -4,6 +4,7 @@ import com.example.vistacuregrad.model.LoginResponse
 import com.example.vistacuregrad.model.OtpRequest
 import com.example.vistacuregrad.model.OtpResponse
 import com.example.vistacuregrad.model.RegisterResponse
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
@@ -31,12 +32,13 @@ interface ApiService {
         @Part("Password") password: RequestBody
     ): Response<LoginResponse>
 
-    @FormUrlEncoded
+    @Multipart
     @POST("api/Authentication/VerifyOTP")
     suspend fun verifyOtp(
-        @Field("code") otpRequest: OtpRequest,
+        @Part ("code") otpRequest: RequestBody,
         @Header("Authorization") token: String
     ): Response<OtpResponse>
+
 
 
 
