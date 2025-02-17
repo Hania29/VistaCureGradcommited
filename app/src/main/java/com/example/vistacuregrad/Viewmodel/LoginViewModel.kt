@@ -23,13 +23,15 @@ class LoginViewModel(private val repository: AuthRepository, private val context
                 _loginResponse.postValue(response)
 
                 if (response.isSuccessful) {
-                    val token = response.body()?.token
+                    val loginResponse = response.body()
+                    Log.d("LoginViewModel", "Login Response: $loginResponse")
 
-                    if (!token.isNullOrEmpty()) {
-                        saveToken(token)
-
+                    val tempToken = loginResponse?.tempToken
+                    if (!tempToken.isNullOrEmpty()) {
+                        saveTempToken(tempToken)
+                        Log.d("LoginViewModel", "TempToken saved successfully: $tempToken")
                     } else {
-                        Log.e("LoginViewModel", "Token is null or empty")
+                        Log.e("LoginViewModel", "TempToken is null or empty")
                     }
                 } else {
                     val errorBody = response.errorBody()?.string()
@@ -37,22 +39,18 @@ class LoginViewModel(private val repository: AuthRepository, private val context
                 }
 
             } catch (e: Exception) {
-                Log.e("LoginViewModel", "Exception during login: ${e.message}")
-                e.printStackTrace()
+                Log.e("LoginViewModel", "Exception during login: ${e.message}", e)
             }
         }
     }
 
-    private fun saveToken(token: String) {
+    private fun saveTempToken(token: String) {
         val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString("TOKEN", token).commit()
-        Log.d("LoginViewModel", "Token saved: $token")
-    }
-    private fun getToken(): String? {
-        val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("TOKEN", null)
+        sharedPreferences.edit().putString("TEMP_TOKEN", token).apply()
     }
 
-
+    fun getTempToken(): String? {
+        val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("TEMP_TOKEN", null)
+    }
 }
-

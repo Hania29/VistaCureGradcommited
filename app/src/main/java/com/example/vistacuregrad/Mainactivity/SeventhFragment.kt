@@ -73,10 +73,10 @@ class SeventhFragment : Fragment() {
         loginViewModel.loginResponse.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful) {
                 response.body()?.let { body ->
-                    if (body.status == "Success" && !body.token.isNullOrEmpty()) {
+                    if (body.status == "Success" && !body.tempToken.isNullOrEmpty()) {
                         // ✅ Save token in SharedPreferences for OTP verification
                         sharedPreferences.edit()
-                            .putString("TOKEN", body.token)
+                            .putString("TOKEN", body.tempToken)
                             .apply()
 
                         Log.d("LoginFragment", "Login successful. Token saved. Navigating to OTP screen...")

@@ -39,6 +39,7 @@ class MedicalHistory : Fragment() {
         val etFamilyHistory: EditText = view.findViewById(R.id.etfamilyhistory)
         val etCheckupDate: EditText = view.findViewById(R.id.etcheckupdate)
 
+        // Restore saved state
         savedInstanceState?.let {
             savedAllergies = it.getString("allergies")
             savedChronicConditions = it.getString("chronicConditions")
@@ -55,6 +56,7 @@ class MedicalHistory : Fragment() {
             etCheckupDate.setText(savedCheckupDate)
         }
 
+        // Done button click listener
         btnDone.setOnClickListener {
             val allergies = etAllergies.text.toString().trim()
             val chronicConditions = etChronicConditions.text.toString().trim()
@@ -63,6 +65,7 @@ class MedicalHistory : Fragment() {
             val familyHistory = etFamilyHistory.text.toString().trim()
             val checkupDate = etCheckupDate.text.toString().trim()
 
+            // Check if all fields are filled
             if (allergies.isEmpty() || chronicConditions.isEmpty() || medications.isEmpty() ||
                 surgeries.isEmpty() || familyHistory.isEmpty() || checkupDate.isEmpty()
             ) {
@@ -70,17 +73,20 @@ class MedicalHistory : Fragment() {
                 return@setOnClickListener
             }
 
+            // Validate date format
             if (!isValidDate(checkupDate)) {
                 etCheckupDate.error = "Enter a valid date in the format Day/Month/Year"
                 etCheckupDate.requestFocus()
                 return@setOnClickListener
             }
 
+            // Navigate to NewActivity
             val intent = Intent(requireActivity(), NewActivity::class.java)
             startActivity(intent)
-            requireActivity().finish()
+            requireActivity().finish()  // Close the current activity
         }
 
+        // Back button click listener
         btnBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -88,6 +94,7 @@ class MedicalHistory : Fragment() {
         return view
     }
 
+    // Function to validate the date format
     fun isValidDate(date: String): Boolean {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         dateFormat.isLenient = false
@@ -99,6 +106,7 @@ class MedicalHistory : Fragment() {
         }
     }
 
+    // Save instance state for UI persistence across configuration changes
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("allergies", savedAllergies)
@@ -109,6 +117,7 @@ class MedicalHistory : Fragment() {
         outState.putString("checkupDate", savedCheckupDate)
     }
 
+    // Restore saved state after fragment is recreated
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         savedInstanceState?.let {

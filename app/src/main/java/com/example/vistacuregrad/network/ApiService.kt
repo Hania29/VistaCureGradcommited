@@ -1,9 +1,11 @@
 package com.example.vistacuregrad.network
 
 import com.example.vistacuregrad.model.LoginResponse
+import com.example.vistacuregrad.model.MedicalHistoryResponse
 import com.example.vistacuregrad.model.OtpRequest
 import com.example.vistacuregrad.model.OtpResponse
 import com.example.vistacuregrad.model.RegisterResponse
+import com.example.vistacuregrad.model.UserProfileResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -25,20 +27,43 @@ interface ApiService {
         @Part("Email") email: RequestBody
     ): Response<RegisterResponse>
 
-    @Multipart
+    @FormUrlEncoded
     @POST("api/Authentication/Login")
     suspend fun loginUser(
-        @Part("Username") username: RequestBody,
-        @Part("Password") password: RequestBody
+        @Field("Username") username: String,
+        @Field("Password") password: String
     ): Response<LoginResponse>
 
-    @Multipart
+    @FormUrlEncoded
     @POST("api/Authentication/VerifyOTP")
     suspend fun verifyOtp(
-        @Part ("code") otpRequest: RequestBody,
+        @Field("code") code: String,
         @Header("Authorization") token: String
     ): Response<OtpResponse>
 
+    @Multipart
+    @POST("api/Authentication/CreateUserProfile")
+    suspend fun createUserProfile(
+        @Header("Authorization") token: String,  // For JWT authentication
+        @Part("FirstName") firstName: RequestBody,
+        @Part("LastName") lastName: RequestBody,
+        @Part("DateOfBirth") dateOfBirth: RequestBody,
+        @Part("Height") height: RequestBody,
+        @Part("Weight") weight: RequestBody,
+        @Part("Gender") gender: RequestBody
+    ): Response<UserProfileResponse>
+
+    @Multipart
+    @POST("api/Authentication/MedicalHistory")
+    suspend fun createMedicalHistory(
+        @Header("Authorization") token: String,  // For JWT authentication
+        @Part("allergies") allergies: RequestBody,
+        @Part("chronicConditions") chronicConditions: RequestBody,
+        @Part("medications") medications: RequestBody,
+        @Part("surgeries") surgeries: RequestBody,
+        @Part("familyHistory") familyHistory: RequestBody,
+        @Part("lastCheckupDate") lastCheckupDate: RequestBody
+    ): Response<MedicalHistoryResponse>
 
 
 
