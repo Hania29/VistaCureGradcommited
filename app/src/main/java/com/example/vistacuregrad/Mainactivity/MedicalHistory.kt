@@ -5,33 +5,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
-import com.example.vistacuregrad.Newactivity.NewActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.vistacuregrad.R
+import com.example.vistacuregrad.Repository.AuthRepository
+import com.example.vistacuregrad.model.MedicalHistoryRequest
+import com.example.vistacuregrad.network.RetrofitClient
+import com.example.vistacuregrad.viewmodel.MedicalHistoryViewModel
+import com.example.vistacuregrad.viewmodel.MedicalHistoryViewModelFactory
+import com.example.vistacuregrad.Newactivity.NewActivity
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 class MedicalHistory : Fragment() {
 
-    private var savedAllergies: String? = null
-    private var savedChronicConditions: String? = null
-    private var savedMedications: String? = null
-    private var savedSurgeries: String? = null
-    private var savedFamilyHistory: String? = null
-    private var savedCheckupDate: String? = null
+    private lateinit var viewModel: MedicalHistoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_medical_history, container, false)
 
+        // Initialize UI elements
         val btnDone: Button = view.findViewById(R.id.btndone)
         val btnBack: Button = view.findViewById(R.id.btnBack)
-
         val etAllergies: EditText = view.findViewById(R.id.etAllergies)
         val etChronicConditions: EditText = view.findViewById(R.id.etchronicconditions)
         val etMedications: EditText = view.findViewById(R.id.etmedications)
@@ -39,24 +39,12 @@ class MedicalHistory : Fragment() {
         val etFamilyHistory: EditText = view.findViewById(R.id.etfamilyhistory)
         val etCheckupDate: EditText = view.findViewById(R.id.etcheckupdate)
 
-        // Restore saved state
-        savedInstanceState?.let {
-            savedAllergies = it.getString("allergies")
-            savedChronicConditions = it.getString("chronicConditions")
-            savedMedications = it.getString("medications")
-            savedSurgeries = it.getString("surgeries")
-            savedFamilyHistory = it.getString("familyHistory")
-            savedCheckupDate = it.getString("checkupDate")
+        // Initialize ViewModel
+        val apiService = RetrofitClient.apiService  // Get ApiService instance
+        val repository = AuthRepository(apiService) // Pass ApiService to Repository
+        val factory = MedicalHistoryViewModelFactory(repository, requireContext()) // Pass repository and context
+        viewModel = ViewModelProvider(this, factory)[MedicalHistoryViewModel::class.java]
 
-            etAllergies.setText(savedAllergies)
-            etChronicConditions.setText(savedChronicConditions)
-            etMedications.setText(savedMedications)
-            etSurgeries.setText(savedSurgeries)
-            etFamilyHistory.setText(savedFamilyHistory)
-            etCheckupDate.setText(savedCheckupDate)
-        }
-
-        // Done button click listener
         btnDone.setOnClickListener {
             val allergies = etAllergies.text.toString().trim()
             val chronicConditions = etChronicConditions.text.toString().trim()
@@ -65,26 +53,47 @@ class MedicalHistory : Fragment() {
             val familyHistory = etFamilyHistory.text.toString().trim()
             val checkupDate = etCheckupDate.text.toString().trim()
 
-            // Check if all fields are filled
+            // Validate user inputs
             if (allergies.isEmpty() || chronicConditions.isEmpty() || medications.isEmpty() ||
-                surgeries.isEmpty() || familyHistory.isEmpty() || checkupDate.isEmpty()
-            ) {
+                surgeries.isEmpty() || familyHistory.isEmpty() || checkupDate.isEmpty()) {
                 Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Validate date format
+            // Validate Date of Birth format
             if (!isValidDate(checkupDate)) {
-                etCheckupDate.error = "Enter a valid date in the format Day/Month/Year"
+                etCheckupDate.error = "Enter a valid date (dd/MM/yyyy)"
                 etCheckupDate.requestFocus()
                 return@setOnClickListener
             }
 
-            // Navigate to NewActivity
-            val intent = Intent(requireActivity(), NewActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()  // Close the current activity
+            // Create medical history request object
+            val request = MedicalHistoryRequest(
+                allergies = allergies,
+                chronicConditions = chronicConditions,
+                medications = medications,
+                surgeries = surgeries,
+                familyHistory = familyHistory,
+                lastCheckupDate = checkupDate
+            )
+
+            // Call ViewModel function to create medical history
+            viewModel.createMedicalHistory(request)
         }
+
+        // Observe API response
+        viewModel.medicalHistoryResponse.observe(viewLifecycleOwner, Observer { response ->
+            if (response.isSuccessful) {
+                Toast.makeText(requireContext(), "Medical history created successfully!", Toast.LENGTH_SHORT).show()
+
+                // Intent to navigate to NewActivity
+                val intent = Intent(requireActivity(), NewActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()  // Close the current fragment and activity
+            } else {
+                Toast.makeText(requireContext(), "Failed: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+            }
+        })
 
         // Back button click listener
         btnBack.setOnClickListener {
@@ -95,38 +104,13 @@ class MedicalHistory : Fragment() {
     }
 
     // Function to validate the date format
-    fun isValidDate(date: String): Boolean {
+    private fun isValidDate(date: String): Boolean {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         dateFormat.isLenient = false
         return try {
-            val parsedDate = dateFormat.parse(date)
-            parsedDate != null
+            dateFormat.parse(date) != null
         } catch (e: Exception) {
             false
-        }
-    }
-
-    // Save instance state for UI persistence across configuration changes
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("allergies", savedAllergies)
-        outState.putString("chronicConditions", savedChronicConditions)
-        outState.putString("medications", savedMedications)
-        outState.putString("surgeries", savedSurgeries)
-        outState.putString("familyHistory", savedFamilyHistory)
-        outState.putString("checkupDate", savedCheckupDate)
-    }
-
-    // Restore saved state after fragment is recreated
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        savedInstanceState?.let {
-            savedAllergies = it.getString("allergies")
-            savedChronicConditions = it.getString("chronicConditions")
-            savedMedications = it.getString("medications")
-            savedSurgeries = it.getString("surgeries")
-            savedFamilyHistory = it.getString("familyHistory")
-            savedCheckupDate = it.getString("checkupDate")
         }
     }
 }
