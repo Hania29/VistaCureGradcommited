@@ -100,9 +100,23 @@
         android:name="com.example.vistacuregrad.Mainactivity.ResetPass"
         android:label="fragment_reset_pass"
         tools:layout="@layout/fragment_reset_pass">
+
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <argument
+            android:name="token"
+            app:argType="string"
+            android:defaultValue="" />
+
         <deepLink
             android:id="@+id/deepLink_resetPass"
-            app:uri="https://www.yourdomain.com/resetpassword" />
+            app:uri="https://0331-197-54-149-75.ngrok-free.app/api/Authentication/ResetPassword?token={token}&amp;email={email}" />
+        <action
+            android:id="@+id/action_resetPass_to_seventhFragment"
+            app:destination="@id/seventhFragment" />
     </fragment>
 
 

@@ -1,10 +1,12 @@
 package com.example.vistacuregrad.network
 
+import com.example.vistacuregrad.model.ForgotPasswordResponse
 import com.example.vistacuregrad.model.LoginResponse
 import com.example.vistacuregrad.model.MedicalHistoryResponse
 import com.example.vistacuregrad.model.OtpRequest
 import com.example.vistacuregrad.model.OtpResponse
 import com.example.vistacuregrad.model.RegisterResponse
+import com.example.vistacuregrad.model.ResetPasswordResponse
 import com.example.vistacuregrad.model.UserProfileResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -17,6 +19,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface ApiService {
     @Multipart
@@ -65,6 +68,21 @@ interface ApiService {
         @Part("lastCheckupDate") lastCheckupDate: RequestBody
     ): Response<MedicalHistoryResponse>
 
+    @FormUrlEncoded
+    @POST("api/Authentication/forgetPasswordlogin")
+    suspend fun forgotPassword(
+        @Field("email") email: String
+    ): Response<ForgotPasswordResponse>
+
+
+    @FormUrlEncoded
+    @POST("api/Authentication/ResetPasswordlogin")
+    suspend fun resetPassword(
+        @Field("password") password: String,
+        @Field("confirmPassword") confirmPassword: String,
+        @Query("token") token: String,
+        @Field("email") email: String
+    ): Response<ResetPasswordResponse>
 
 
 }

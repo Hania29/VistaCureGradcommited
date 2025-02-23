@@ -10,13 +10,26 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.vistacuregrad.R
+import com.example.vistacuregrad.Repository.AuthRepository
+import com.example.vistacuregrad.network.RetrofitClient
+import com.example.vistacuregrad.viewmodel.AuthViewModel
+import com.example.vistacuregrad.viewmodel.AuthViewModelFactory
+import kotlinx.coroutines.launch
 
 class FifthFragment : Fragment() {
 
     private lateinit var emailField: EditText
     private var savedEmail: String? = null
+
+    // ViewModel initialization
+    private val authViewModel: AuthViewModel by viewModels {
+        AuthViewModelFactory(AuthRepository(RetrofitClient.apiService))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,66 +39,64 @@ class FifthFragment : Fragment() {
 
         emailField = view.findViewById(R.id.etEmailAddressThirdActivity)
 
-        // Restore the saved email if available
-        savedInstanceState?.let {
-            savedEmail = it.getString("email")
-            emailField.setText(savedEmail)
+        savedInstanceState?.getString("email")?.let {
+            emailField.setText(it)
         }
 
         val btnBack: Button = view.findViewById(R.id.btnBack)
         val btnConfirm: Button = view.findViewById(R.id.btnConfirmMail)
 
         btnConfirm.setOnClickListener {
-            val emailText = emailField.text.toString().trim()
-
-            if (validateFields(emailField)) {
-                if (isValidEmail(emailText)) {
-                    findNavController().navigate(R.id.action_fifthFragment_to_resetPass)
-                } else {
-                    emailField.error = "Enter a valid email"
-                    emailField.requestFocus()
-                }
-            } else {
-                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
-            }
+            handleForgotPassword()
         }
 
         btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
+        observeForgotPasswordResponse()
+
         return view
     }
 
-    private fun validateFields(vararg fields: EditText): Boolean {
-        var allValid = true
-        for (field in fields) {
-            if (TextUtils.isEmpty(field.text.toString().trim())) {
-                field.error = "This field cannot be empty"
-                allValid = false
-            }
+    private fun handleForgotPassword() {
+        val emailText = emailField.text.toString().trim()
+
+        if (!isValidEmail(emailText)) {
+            emailField.error = "Enter a valid email"
+            emailField.requestFocus()
+            return
         }
-        return allValid
+
+        lifecycleScope.launch {
+            authViewModel.forgotPassword(emailText)
+        }
+    }
+
+    private fun observeForgotPasswordResponse() {
+        authViewModel.forgotPasswordResponse.observe(viewLifecycleOwner, Observer { response ->
+            if (response.isSuccessful && response.body() != null) {
+                Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_fifthFragment_to_resetPass)
+            } else {
+                Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun isValidEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // Save the email text
         outState.putString("email", emailField.text.toString())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        // Restore the email field value
-        savedInstanceState?.let {
-            val savedEmail = it.getString("email")
-            emailField.setText(savedEmail)
+        savedInstanceState?.getString("email")?.let {
+            emailField.setText(it)
         }
     }
 }
-
-

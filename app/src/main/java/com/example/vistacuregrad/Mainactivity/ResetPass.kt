@@ -1,75 +1,116 @@
 package com.example.vistacuregrad.Mainactivity
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
-import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.vistacuregrad.R
+import com.example.vistacuregrad.Repository.AuthRepository
+import com.example.vistacuregrad.network.RetrofitClient
+import com.example.vistacuregrad.viewmodel.ResetPasswordViewModel
+import com.example.vistacuregrad.viewmodel.ResetPasswordViewModelFactory
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class ResetPass : Fragment() {
 
-    private var savedEmail: String? = null
-    private var savedPassword: String? = null
-    private var savedConfirmPassword: String? = null
+    private lateinit var etPass: EditText
+    private lateinit var etConfirmPass: EditText
+    private lateinit var etEmailAddress: EditText
+    private lateinit var btnDone: Button
+    private lateinit var btnBack: Button
+    private lateinit var ivTogglePass: ImageView
+    private lateinit var ivToggleConfirmPass: ImageView
+
+    private var token: String? = null
+    private var email: String? = null
     private var isPasswordVisible = false
     private var isConfirmPasswordVisible = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_reset_pass, container, false)
+    private val resetPasswordViewModel: ResetPasswordViewModel by viewModels {
+        ResetPasswordViewModelFactory(AuthRepository(RetrofitClient.apiService))
+    }
 
-        // Initialize EditText fields
-        val etPass: EditText = view.findViewById(R.id.etPass)
-        val etConfirmPass: EditText = view.findViewById(R.id.etConfirmPass)
-        val etEmailAddress: EditText = view.findViewById(R.id.etemailaddress)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        // Initialize ImageViews for toggling password visibility
-        val ivTogglePass: ImageView = view.findViewById(R.id.ivTogglePass)
-        val ivToggleConfirmPass: ImageView = view.findViewById(R.id.ivToggleConfirmPass)
-
-        // Restore saved data if available
-        savedInstanceState?.let {
-            savedEmail = it.getString("email")
-            savedPassword = it.getString("password")
-            savedConfirmPassword = it.getString("confirmPassword")
-
-            etEmailAddress.setText(savedEmail)
-            etPass.setText(savedPassword)
-            etConfirmPass.setText(savedConfirmPassword)
+        val deepLink: Uri? = requireActivity().intent?.data
+        if (deepLink != null) {
+            token = deepLink.getQueryParameter("token")?.replace("+", "%2B")
+            email = deepLink.getQueryParameter("email")
+        } else {
+            arguments?.let { bundle ->
+                token = bundle.getString("token")?.replace("+", "%2B")
+                email = bundle.getString("email")
+            }
         }
 
-        // Set up password visibility toggle for "Password" field
+        Log.d("ResetPassFragment", "Extracted Token: $token")
+        Log.d("ResetPassFragment", "Extracted Email: $email")
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        val view = inflater.inflate(R.layout.fragment_reset_pass, container, false)
+
+        etPass = view.findViewById(R.id.etPass)
+        etConfirmPass = view.findViewById(R.id.etConfirmPass)
+        etEmailAddress = view.findViewById(R.id.etemailaddress)
+        ivTogglePass = view.findViewById(R.id.ivTogglePass)
+        ivToggleConfirmPass = view.findViewById(R.id.ivToggleConfirmPass)
+        btnDone = view.findViewById(R.id.btnDone)
+        btnBack = view.findViewById(R.id.btnBack)
+
+        etEmailAddress.setText(email ?: "")
+
         ivTogglePass.setOnClickListener {
             isPasswordVisible = togglePasswordVisibility(etPass, ivTogglePass, isPasswordVisible)
         }
-
-        // Set up password visibility toggle for "Confirm Password" field
         ivToggleConfirmPass.setOnClickListener {
             isConfirmPasswordVisible = togglePasswordVisibility(etConfirmPass, ivToggleConfirmPass, isConfirmPasswordVisible)
         }
 
-        // Initialize Done button
-        val btnDone: Button = view.findViewById(R.id.btnDone)
         btnDone.setOnClickListener {
-            if (validateFields(etPass, etConfirmPass, etEmailAddress)) {
-                Toast.makeText(requireContext(), "Validation successful!", Toast.LENGTH_SHORT).show()
-                // Proceed with next steps, e.g., navigating or sending data to a server
+            val password = etPass.text.toString().trim()
+            val confirmPassword = etConfirmPass.text.toString().trim()
+            val emailInput = etEmailAddress.text.toString().trim()
+
+            if (validateFields(password, confirmPassword, emailInput)) {
+                if (token.isNullOrEmpty()) {
+                    showToast("Invalid or missing token")
+                } else {
+                    lifecycleScope.launch {
+                        Log.d("ResetPassFragment", "Sending Request - Token: $token, Email: $emailInput")
+                        resetPasswordViewModel.resetPassword(password, confirmPassword, token!!, emailInput)
+                    }
+                }
             }
         }
 
-        // Initialize Back button
-        val btnBack: Button = view.findViewById(R.id.btnBack)
+        resetPasswordViewModel.resetPasswordResponse.observe(viewLifecycleOwner) { response ->
+            lifecycleScope.launch {
+                if (response.isSuccessful && response.body() != null) {
+                    showToast(response.body()?.message ?: "Password reset successfully!")
+                    Log.d("ResetPassFragment", "Password Reset Successful")
+                    findNavController().navigate(R.id.action_resetPass_to_seventhFragment)
+                } else {
+                    val errorMessage = parseError(response)
+                    Log.e("ResetPassFragment", "API Error: $errorMessage")
+                    showToast(errorMessage)
+                }
+            }
+        }
+
         btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -78,94 +119,46 @@ class ResetPass : Fragment() {
     }
 
     private fun togglePasswordVisibility(editText: EditText, imageView: ImageView, isVisible: Boolean): Boolean {
-        if (isVisible) {
-            // Hide password
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            imageView.setImageResource(R.drawable.hidden11) // Replace with your "hidden" icon
+        editText.inputType = if (isVisible) {
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         } else {
-            // Show password
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            imageView.setImageResource(R.drawable.visabile) // Replace with your "visible" icon
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         }
-        editText.setSelection(editText.text.length) // Keep cursor at the end
+        imageView.setImageResource(if (isVisible) R.drawable.hidden11 else R.drawable.visabile)
+        editText.setSelection(editText.text.length)
         return !isVisible
     }
 
-    private fun validateFields(etPass: EditText, etConfirmPass: EditText, etEmailAddress: EditText): Boolean {
-        val password = etPass.text.toString()
-        val confirmPassword = etConfirmPass.text.toString()
-        val email = etEmailAddress.text.toString()
-
-        // Email validation
-        when {
-            TextUtils.isEmpty(email) -> {
-                etEmailAddress.error = "Email is required"
-                etEmailAddress.requestFocus()
-                return false
-            }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                etEmailAddress.error = "Enter a valid email"
-                etEmailAddress.requestFocus()
-                return false
-            }
+    private fun validateFields(password: String, confirmPassword: String, email: String): Boolean {
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmailAddress.error = "Enter a valid email"
+            etEmailAddress.requestFocus()
+            return false
         }
-
-        // Password validation
-        when {
-            TextUtils.isEmpty(password) -> {
-                etPass.error = "Password is required"
-                etPass.requestFocus()
-                return false
-            }
-            password.length < 6 || password.length > 20 -> {
-                etPass.error = "Password must be between 6 and 20 characters"
-                etPass.requestFocus()
-                return false
-            }
-            !password.matches(".*[A-Z].*".toRegex()) -> {
-                etPass.error = "Password must include at least one capital letter"
-                etPass.requestFocus()
-                return false
-            }
-            !password.matches(".*\\d.*".toRegex()) -> {
-                etPass.error = "Password must include at least one number"
-                etPass.requestFocus()
-                return false
-            }
-            !password.matches(".*[@#\$%&!].*".toRegex()) -> {
-                etPass.error = "Password must include at least one special character (@#\$%&!)"
-                etPass.requestFocus()
-                return false
-            }
-            password != confirmPassword -> {
-                etConfirmPass.error = "Passwords do not match"
-                etConfirmPass.requestFocus()
-                return false
-            }
+        if (password.length !in 8..20 || !password.matches(".*[A-Z].*".toRegex()) ||
+            !password.matches(".*\\d.*".toRegex()) || !password.matches(".*[!@#\$%^&*()_+\\-=].*".toRegex())
+        ) {
+            etPass.error = "Password must be 8-20 chars, include 1 uppercase, 1 number, and 1 special char"
+            etPass.requestFocus()
+            return false
         }
-
+        if (password != confirmPassword) {
+            etConfirmPass.error = "Passwords do not match"
+            etConfirmPass.requestFocus()
+            return false
+        }
         return true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // Save the entered data when rotating
-        outState.putString("email", savedEmail)
-        outState.putString("password", savedPassword)
-        outState.putString("confirmPassword", savedConfirmPassword)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        // Restore the saved data (email, password, confirm password)
-        savedInstanceState?.let {
-            savedEmail = it.getString("email")
-            savedPassword = it.getString("password")
-            savedConfirmPassword = it.getString("confirmPassword")
+    private fun parseError(response: retrofit2.Response<*>): String {
+        return try {
+            JSONObject(response.errorBody()?.string() ?: "{}").optString("message", "Unknown error occurred")
+        } catch (e: Exception) {
+            "Error: ${response.message()}"
         }
     }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 }
-
-
-
-

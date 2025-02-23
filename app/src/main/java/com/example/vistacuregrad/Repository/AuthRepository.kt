@@ -1,19 +1,13 @@
 package com.example.vistacuregrad.Repository
 
 import android.util.Log
-import com.example.vistacuregrad.model.LoginResponse
-import com.example.vistacuregrad.model.MedicalHistoryRequest
-import com.example.vistacuregrad.model.MedicalHistoryResponse
-import com.example.vistacuregrad.model.OtpResponse
-import com.example.vistacuregrad.model.RegisterResponse
-import com.example.vistacuregrad.model.UserProfileRequest
-import com.example.vistacuregrad.model.UserProfileResponse
+import com.example.vistacuregrad.model.*
 import com.example.vistacuregrad.network.ApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 
-
+@Suppress("UNREACHABLE_CODE")
 class AuthRepository(private val apiService: ApiService) {
 
     suspend fun registerUser(
@@ -33,20 +27,15 @@ class AuthRepository(private val apiService: ApiService) {
     }
 
     suspend fun loginUser(username: String, password: String): Response<LoginResponse> {
-
-
         return apiService.loginUser(username, password)
     }
 
-
     suspend fun verifyOtp(code: String, token: String): Response<OtpResponse> {
-
-        Log.d("AautoRrepository", "code: $code | token: '$token'")
+        Log.d("AuthRepository", "code: $code | token: '$token'")
         return apiService.verifyOtp(code, token)
     }
 
     suspend fun createUserProfile(token: String, request: UserProfileRequest): Response<UserProfileResponse> {
-        // Convert request fields to RequestBody using the same pattern as registerUser
         val firstNameBody = request.firstName.toRequestBody("text/plain".toMediaTypeOrNull())
         val lastNameBody = request.lastName.toRequestBody("text/plain".toMediaTypeOrNull())
         val dateOfBirthBody = request.dateOfBirth.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -54,7 +43,6 @@ class AuthRepository(private val apiService: ApiService) {
         val weightBody = request.weight.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val genderBody = request.gender.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        // Call the API service method to create the user profile
         return apiService.createUserProfile(
             token = token,
             firstName = firstNameBody,
@@ -65,8 +53,8 @@ class AuthRepository(private val apiService: ApiService) {
             gender = genderBody
         )
     }
+
     suspend fun createMedicalHistory(token: String, request: MedicalHistoryRequest): Response<MedicalHistoryResponse> {
-        // Convert fields to RequestBody
         val allergiesBody = request.allergies.toRequestBody("text/plain".toMediaTypeOrNull())
         val chronicConditionsBody = request.chronicConditions.toRequestBody("text/plain".toMediaTypeOrNull())
         val medicationsBody = request.medications.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -74,7 +62,6 @@ class AuthRepository(private val apiService: ApiService) {
         val familyHistoryBody = request.familyHistory.toRequestBody("text/plain".toMediaTypeOrNull())
         val lastCheckupDateBody = request.lastCheckupDate.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        // Call the API to create medical history
         return apiService.createMedicalHistory(
             token = token,
             allergies = allergiesBody,
@@ -86,9 +73,22 @@ class AuthRepository(private val apiService: ApiService) {
         )
     }
 
+    // ✅ Properly placed forgotPassword function
+    suspend fun forgotPassword(email: String): Response<ForgotPasswordResponse> {
+        return apiService.forgotPassword(email)
+    }
+
+    suspend fun resetPassword(password: String, confirmPassword: String, token: String, email: String): Response<ResetPasswordResponse> {
+        val processedToken = token.replace("+", "%2B")  // ✅ Ensure proper encoding
+        return apiService.resetPassword(password, confirmPassword, processedToken, email)
+    }
 
 
 }
+
+
+
+
 
 
 
