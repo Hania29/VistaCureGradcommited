@@ -24,24 +24,40 @@
             android:name=".Mainactivity.MainActivity"
             android:exported="true">
 
-            <!-- Main Launcher Intent -->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Deep Link Intent -->
-            <intent-filter android:autoVerify="true">
+
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:scheme="https"
-                    android:host="0331-197-54-149-75.ngrok-free.app"
+                    android:host="1ca6-196-152-222-247.ngrok-free.app"
                     android:pathPrefix="/resetpassword" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="1ca6-196-152-222-247.ngrok-free.app"
+                    android:pathPrefix="/resetpassword" />
+            </intent-filter>
+            <nav-graph android:value="@navigation/my_nav"/>
         </activity>
     </application>
 </manifest>

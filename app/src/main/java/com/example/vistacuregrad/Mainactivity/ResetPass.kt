@@ -45,8 +45,9 @@ class ResetPass : Fragment() {
 
         val deepLink: Uri? = requireActivity().intent?.data
         if (deepLink != null) {
-            token = deepLink.getQueryParameter("token")?.replace("+", "%2B")
+            token = deepLink.getQueryParameter("token")
             email = deepLink.getQueryParameter("email")
+            Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
         } else {
             arguments?.let { bundle ->
                 token = bundle.getString("token")?.replace("+", "%2B")
