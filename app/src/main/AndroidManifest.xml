@@ -18,12 +18,6 @@
         <activity
             android:name="com.example.vistacuregrad.Newactivity.NewActivity"
             android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".Mainactivity.MainActivity"
-            android:exported="true">
-
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +25,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Mainactivity.MainActivity"
+            android:exported="true">
+
+
+
 
 
             <intent-filter>
@@ -54,7 +56,7 @@
 
                 <data
                     android:scheme="http"
-                    android:host="1ca6-196-152-222-247.ngrok-free.app"
+                    android:host="c421-197-54-188-79.ngrok-free.app"
                     android:pathPrefix="/resetpassword" />
             </intent-filter>
             <nav-graph android:value="@navigation/my_nav"/>

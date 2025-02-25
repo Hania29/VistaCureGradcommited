@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.vistacuregrad.model.*
 import com.example.vistacuregrad.network.ApiService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 
@@ -35,7 +36,10 @@ class AuthRepository(private val apiService: ApiService) {
         return apiService.verifyOtp(code, token)
     }
 
-    suspend fun createUserProfile(token: String, request: UserProfileRequest): Response<UserProfileResponse> {
+    suspend fun createUserProfile(
+        token: String,
+        request: UserProfileRequest
+    ): Response<UserProfileResponse> {
         val firstNameBody = request.firstName.toRequestBody("text/plain".toMediaTypeOrNull())
         val lastNameBody = request.lastName.toRequestBody("text/plain".toMediaTypeOrNull())
         val dateOfBirthBody = request.dateOfBirth.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -54,13 +58,19 @@ class AuthRepository(private val apiService: ApiService) {
         )
     }
 
-    suspend fun createMedicalHistory(token: String, request: MedicalHistoryRequest): Response<MedicalHistoryResponse> {
+    suspend fun createMedicalHistory(
+        token: String,
+        request: MedicalHistoryRequest
+    ): Response<MedicalHistoryResponse> {
         val allergiesBody = request.allergies.toRequestBody("text/plain".toMediaTypeOrNull())
-        val chronicConditionsBody = request.chronicConditions.toRequestBody("text/plain".toMediaTypeOrNull())
+        val chronicConditionsBody =
+            request.chronicConditions.toRequestBody("text/plain".toMediaTypeOrNull())
         val medicationsBody = request.medications.toRequestBody("text/plain".toMediaTypeOrNull())
         val surgeriesBody = request.surgeries.toRequestBody("text/plain".toMediaTypeOrNull())
-        val familyHistoryBody = request.familyHistory.toRequestBody("text/plain".toMediaTypeOrNull())
-        val lastCheckupDateBody = request.lastCheckupDate.toRequestBody("text/plain".toMediaTypeOrNull())
+        val familyHistoryBody =
+            request.familyHistory.toRequestBody("text/plain".toMediaTypeOrNull())
+        val lastCheckupDateBody =
+            request.lastCheckupDate.toRequestBody("text/plain".toMediaTypeOrNull())
 
         return apiService.createMedicalHistory(
             token = token,
@@ -78,12 +88,20 @@ class AuthRepository(private val apiService: ApiService) {
         return apiService.forgotPassword(email)
     }
 
-    suspend fun resetPassword(password: String, confirmPassword: String, token: String, email: String): Response<ResetPasswordResponse> {
+    suspend fun resetPassword(
+        password: String,
+        confirmPassword: String,
+        token: String,
+        email: String
+    ): Response<ResetPasswordResponse> {
         val processedToken = token.replace("+", "%2B")  // ✅ Ensure proper encoding
         return apiService.resetPassword(password, confirmPassword, processedToken, email)
     }
 
-
+    suspend fun uploadImages(images: List<MultipartBody.Part>): Response<UploadResponse> {
+        Log.d("AuthRepository", "Uploading ${images.size} images...")
+        return apiService.uploadImages(images)
+    }
 }
 
 
