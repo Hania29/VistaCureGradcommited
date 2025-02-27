@@ -1,5 +1,7 @@
 package com.example.vistacuregrad.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vistacuregrad.Repository.AuthRepository
@@ -10,10 +12,17 @@ import retrofit2.Response
 
 class HomeViewModel(private val repository: AuthRepository) : ViewModel() {
 
-    fun uploadImages(images: List<MultipartBody.Part>, onResult: (Response<UploadResponse>) -> Unit) {
+    private val _diseaseResult = MutableLiveData<Response<UploadResponse>>()
+    val diseaseResult: LiveData<Response<UploadResponse>> get() = _diseaseResult
+
+    fun uploadImage(image: MultipartBody.Part) {
         viewModelScope.launch {
-            val response = repository.uploadImages(images)
-            onResult(response)
+            try {
+                val response = repository.uploadImage(image)
+                _diseaseResult.postValue(response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }

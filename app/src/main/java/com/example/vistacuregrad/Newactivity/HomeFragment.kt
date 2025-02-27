@@ -20,6 +20,7 @@ import com.example.vistacuregrad.network.RetrofitClient
 import com.example.vistacuregrad.viewmodel.HomeViewModel
 import com.example.vistacuregrad.viewmodel.HomeViewModelFactory
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
@@ -45,27 +46,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupUI() {
-        // Disable icon tint for bottom navigation
         binding.bottomNavigationView.itemIconTintList = null
-
-        // Set up drawer button click listener
         binding.materialButtondrawer.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
-
-        // Set up navigation drawer item click listener
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             handleNavigation(menuItem)
             true
         }
-
-        // Set up bottom navigation item click listener
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             handleBottomNavigation(item)
             true
         }
-
-        // Set up browse button click listener
         binding.browse.setOnClickListener {
             openImagePicker()
         }
@@ -113,18 +105,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
     private fun uploadImage(file: File) {
-        // Show progress bar
         binding.progressBar.visibility = View.VISIBLE
 
-        // Prepare the image part for upload
-        val requestFile = file.asRequestBody("image/*".toMediaType())
-        val imagePart = MultipartBody.Part.createFormData("images", file.name, requestFile)
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val imagePart = MultipartBody.Part.createFormData("Images", file.name, requestFile)
 
-        // Upload the image
-        homeViewModel.uploadImages(listOf(imagePart)) { response ->
-            // Hide progress bar
+        homeViewModel.diseaseResult.observe(viewLifecycleOwner) { response ->
             binding.progressBar.visibility = View.GONE
-
             if (response.isSuccessful) {
                 Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show()
                 Log.d("Upload", "Image uploaded successfully")
@@ -134,30 +121,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 Log.e("Upload", "Image upload failed: $errorMessage")
             }
         }
+        homeViewModel.uploadImage(imagePart)
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File? {
         val file = File(context.cacheDir, "temp_${System.currentTimeMillis()}.jpg")
-        try {
+        return try {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 FileOutputStream(file).use { outputStream ->
                     inputStream.copyTo(outputStream)
                 }
             }
-            return file
+            file
         } catch (e: Exception) {
             Log.e("FileCreation", "Error creating file from URI: ${e.message}")
-            return null
+            null
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.bottomNavigationView.menu.findItem(R.id.homeFragment).isChecked = true
     }
 }

@@ -3,7 +3,6 @@ package com.example.vistacuregrad.network
 import com.example.vistacuregrad.model.ForgotPasswordResponse
 import com.example.vistacuregrad.model.LoginResponse
 import com.example.vistacuregrad.model.MedicalHistoryResponse
-import com.example.vistacuregrad.model.OtpRequest
 import com.example.vistacuregrad.model.OtpResponse
 import com.example.vistacuregrad.model.RegisterResponse
 import com.example.vistacuregrad.model.ResetPasswordResponse
@@ -11,10 +10,7 @@ import com.example.vistacuregrad.model.UploadResponse
 import com.example.vistacuregrad.model.UserProfileResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
@@ -87,9 +83,8 @@ interface ApiService {
     ): Response<ResetPasswordResponse>
 
     @Multipart
-    @POST("api/Detection/UploadImages")
-    suspend fun uploadImages(
-        @Part images: List<MultipartBody.Part>
+    @POST("/api/Detection/UploadImages")
+    suspend fun uploadImage(
+        @Part Image: MultipartBody.Part
     ): Response<UploadResponse>
-
 }
