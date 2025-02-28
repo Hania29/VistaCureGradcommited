@@ -1,15 +1,14 @@
 package com.example.vistacuregrad
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
@@ -33,23 +32,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
     private lateinit var homeViewModel: HomeViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentHomeBinding.bind(view)
 
-        // Initialize ViewModel
         val repository = AuthRepository(RetrofitClient.apiService)
         val factory = HomeViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
-        // Set up UI components
         setupUI()
     }
 
@@ -116,19 +106,42 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.progressBar.visibility = View.VISIBLE
 
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestFile) // Change "Images" to "file"
+        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
         homeViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
             binding.progressBar.visibility = View.GONE
-            if (response != null) {
-                Toast.makeText(requireContext(), "Image uploaded successfully: ${response.message}", Toast.LENGTH_SHORT).show()
-                Log.d("Upload", "Image uploaded successfully")
+            if (response != null && response.isSuccessful) {
+                val uploadResponse = response.body()
+                if (uploadResponse != null && uploadResponse.status == "Success") {
+                    val diseaseResults = uploadResponse.results
+                    val message = if (diseaseResults.isNotEmpty()) {
+                        "Disease: ${diseaseResults[0].diseaseName}\nProbability: ${diseaseResults[0].probability}"
+                    } else {
+                        "No diseases detected"
+                    }
+                    showDetectionResultsDialog(message)
+                } else {
+                    showDetectionResultsDialog("Error: ${uploadResponse?.message}")
+                }
             } else {
-                Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT).show()
-                Log.e("Upload", "Image upload failed")
+                val errorMessage = response?.errorBody()?.string() ?: "Unknown error"
+                showDetectionResultsDialog("Image upload failed: $errorMessage")
+                Log.e("Upload", "Image upload failed: $errorMessage")
             }
         }
+
         homeViewModel.uploadImage(imagePart)
+    }
+
+    private fun showDetectionResultsDialog(message: String) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Detection Results")
+            .setMessage(message)
+            .setPositiveButton("Close") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File? {
@@ -144,10 +157,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Log.e("FileCreation", "Error creating file from URI: ${e.message}")
             null
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

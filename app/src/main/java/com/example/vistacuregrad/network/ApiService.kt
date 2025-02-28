@@ -83,6 +83,8 @@ interface ApiService {
     ): Response<ResetPasswordResponse>
 
     @Multipart
-    @POST("api/Detection/UploadImages")
-    suspend fun uploadImage(@Part file: MultipartBody.Part): Response<UploadResponse>
+    @POST("/api/Detection/UploadImages")
+    suspend fun uploadImage(
+        @Part Image: MultipartBody.Part
+    ): Response<UploadResponse>
 }
