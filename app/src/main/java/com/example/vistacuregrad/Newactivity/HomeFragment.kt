@@ -6,8 +6,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
@@ -19,7 +21,6 @@ import com.example.vistacuregrad.databinding.FragmentHomeBinding
 import com.example.vistacuregrad.network.RetrofitClient
 import com.example.vistacuregrad.viewmodel.HomeViewModel
 import com.example.vistacuregrad.viewmodel.HomeViewModelFactory
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -32,9 +33,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
     private lateinit var homeViewModel: HomeViewModel
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentHomeBinding.bind(view)
 
         // Initialize ViewModel
         val repository = AuthRepository(RetrofitClient.apiService)
@@ -108,17 +116,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.progressBar.visibility = View.VISIBLE
 
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val imagePart = MultipartBody.Part.createFormData("Images", file.name, requestFile)
+        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestFile) // Change "Images" to "file"
 
-        homeViewModel.diseaseResult.observe(viewLifecycleOwner) { response ->
+        homeViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
             binding.progressBar.visibility = View.GONE
-            if (response.isSuccessful) {
-                Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+            if (response != null) {
+                Toast.makeText(requireContext(), "Image uploaded successfully: ${response.message}", Toast.LENGTH_SHORT).show()
                 Log.d("Upload", "Image uploaded successfully")
             } else {
-                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                Toast.makeText(requireContext(), "Image upload failed: $errorMessage", Toast.LENGTH_SHORT).show()
-                Log.e("Upload", "Image upload failed: $errorMessage")
+                Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT).show()
+                Log.e("Upload", "Image upload failed")
             }
         }
         homeViewModel.uploadImage(imagePart)
@@ -137,5 +144,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Log.e("FileCreation", "Error creating file from URI: ${e.message}")
             null
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
