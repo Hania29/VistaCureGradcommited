@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +20,6 @@ import com.example.vistacuregrad.databinding.FragmentHomeBinding
 import com.example.vistacuregrad.network.RetrofitClient
 import com.example.vistacuregrad.viewmodel.HomeViewModel
 import com.example.vistacuregrad.viewmodel.HomeViewModelFactory
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -108,20 +108,43 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.progressBar.visibility = View.VISIBLE
 
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val imagePart = MultipartBody.Part.createFormData("Images", file.name, requestFile)
+        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestFile)  // Use "file" as the part name
 
         homeViewModel.diseaseResult.observe(viewLifecycleOwner) { response ->
             binding.progressBar.visibility = View.GONE
             if (response.isSuccessful) {
-                Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show()
-                Log.d("Upload", "Image uploaded successfully")
+                val uploadResponse = response.body()
+                if (uploadResponse != null && uploadResponse.status == "Success") {
+                    // Display the disease detection results in an alert dialog
+                    val diseaseResults = uploadResponse.results
+                    if (diseaseResults.isNotEmpty()) {
+                        val diseaseName = diseaseResults[0].diseaseName
+                        val probability = diseaseResults[0].probability
+                        showDetectionResultsDialog("Disease: $diseaseName\nProbability: $probability")
+                    } else {
+                        showDetectionResultsDialog("No diseases detected")
+                    }
+                } else {
+                    showDetectionResultsDialog("Error: ${uploadResponse?.message}")
+                }
             } else {
                 val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                Toast.makeText(requireContext(), "Image upload failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                showDetectionResultsDialog("Image upload failed: $errorMessage")
                 Log.e("Upload", "Image upload failed: $errorMessage")
             }
         }
         homeViewModel.uploadImage(imagePart)
+    }
+
+    private fun showDetectionResultsDialog(message: String) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Detection Results")
+            .setMessage(message)
+            .setPositiveButton("Close") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File? {
