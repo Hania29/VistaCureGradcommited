@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="DarkBlueMainTitle">#055B7F</color>
+    <color name="Blue">#191970</color>
     <color name="btnback">#0F6183</color>
     <color name="edittext">#77A2B4</color>
     <color name="bottomnav">#D9D9D9</color>
@@ -10,8 +11,9 @@
     <color name="BgAndOnBtnWhite">#EEEEEE</color>
     <color name="SmallWordsFPRSI">#297AA8</color>
     <color name="blackQ">#80000000</color>
-    <color name="gray">#A4A4A4</color>
+    <color name="Text">#4F8FAA</color>
     <color name="white">#FFFFFF</color>
+    <color name="BackGround">#B3C9D6</color>
     <color name="selectedColor">#3B97D3</color>
-    <color name="unselectedColor">#9E9E9E</color>
+    <color name="red">#a70000</color>
 </resources>

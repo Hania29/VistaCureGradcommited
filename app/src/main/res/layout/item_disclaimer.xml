@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Disclaimer Title -->
+    <TextView
+        android:id="@+id/tvDisclaimerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disclaimer!"
+        android:textSize="26sp"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:fontFamily="@font/rasa"/>
+
+    <!-- Disclaimer Description -->
+    <TextView
+        android:id="@+id/tvDisclaimerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@color/LightBlueButtons"
+        android:fontFamily="@font/rasa"/>
+</LinearLayout>

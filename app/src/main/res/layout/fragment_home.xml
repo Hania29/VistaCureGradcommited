@@ -10,6 +10,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+
         android:layout_height="match_parent">
 
         <!-- Main Content -->
@@ -17,6 +18,7 @@
             android:id="@+id/Main_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:padding="16dp">
 
             <!-- App Title -->
