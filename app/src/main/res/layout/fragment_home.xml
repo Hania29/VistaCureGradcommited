@@ -12,12 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Main Content -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/Main_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp">
 
+            <!-- App Title -->
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
@@ -32,6 +34,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Drawer Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/materialButtondrawer"
                 android:layout_width="53dp"
@@ -44,6 +47,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Eye Scanner Image -->
             <ImageView
                 android:id="@+id/imageViewscanner"
                 android:layout_width="200dp"
@@ -55,6 +59,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView11" />
 
+            <!-- Browse Button -->
             <Button
                 android:id="@+id/browse"
                 android:layout_width="0dp"
@@ -83,6 +88,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Bottom Navigation Bar -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
@@ -95,6 +101,7 @@
             app:itemTextColor="@color/drawer" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"

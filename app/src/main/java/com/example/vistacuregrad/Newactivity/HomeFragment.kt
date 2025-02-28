@@ -1,6 +1,7 @@
 package com.example.vistacuregrad
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -19,7 +20,6 @@ import com.example.vistacuregrad.databinding.FragmentHomeBinding
 import com.example.vistacuregrad.network.RetrofitClient
 import com.example.vistacuregrad.viewmodel.HomeViewModel
 import com.example.vistacuregrad.viewmodel.HomeViewModelFactory
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -36,12 +36,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
-        // Initialize ViewModel
         val repository = AuthRepository(RetrofitClient.apiService)
         val factory = HomeViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
-        // Set up UI components
         setupUI()
     }
 
@@ -108,20 +106,42 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.progressBar.visibility = View.VISIBLE
 
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val imagePart = MultipartBody.Part.createFormData("Images", file.name, requestFile)
+        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-        homeViewModel.diseaseResult.observe(viewLifecycleOwner) { response ->
+        homeViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
             binding.progressBar.visibility = View.GONE
-            if (response.isSuccessful) {
-                Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show()
-                Log.d("Upload", "Image uploaded successfully")
+            if (response != null && response.isSuccessful) {
+                val uploadResponse = response.body()
+                if (uploadResponse != null && uploadResponse.status == "Success") {
+                    val diseaseResults = uploadResponse.results
+                    val message = if (diseaseResults.isNotEmpty()) {
+                        "Disease: ${diseaseResults[0].diseaseName}\nProbability: ${diseaseResults[0].probability}"
+                    } else {
+                        "No diseases detected"
+                    }
+                    showDetectionResultsDialog(message)
+                } else {
+                    showDetectionResultsDialog("Error: ${uploadResponse?.message}")
+                }
             } else {
-                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                Toast.makeText(requireContext(), "Image upload failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                val errorMessage = response?.errorBody()?.string() ?: "Unknown error"
+                showDetectionResultsDialog("Image upload failed: $errorMessage")
                 Log.e("Upload", "Image upload failed: $errorMessage")
             }
         }
+
         homeViewModel.uploadImage(imagePart)
+    }
+
+    private fun showDetectionResultsDialog(message: String) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Detection Results")
+            .setMessage(message)
+            .setPositiveButton("Close") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun getFileFromUri(context: Context, uri: Uri): File? {
