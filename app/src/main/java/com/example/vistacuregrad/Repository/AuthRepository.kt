@@ -98,9 +98,11 @@ class AuthRepository(private val apiService: ApiService) {
         return apiService.resetPassword(password, confirmPassword, processedToken, email)
     }
 
-    suspend fun uploadImage (image: MultipartBody.Part): Response<UploadResponse> {
-        return apiService.uploadImage(image)
-    }
+
+        suspend fun uploadImage (file: MultipartBody.Part): Response<UploadResponse> {
+            return apiService.uploadImage(file)
+        }
+
 
 
 

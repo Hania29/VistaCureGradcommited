@@ -83,8 +83,8 @@ interface ApiService {
     ): Response<ResetPasswordResponse>
 
     @Multipart
-    @POST("api/Detection/UploadImages")  // Ensure this matches the backend route
+    @POST("/api/Detection/UploadImages")
     suspend fun uploadImage(
-        @Part file: MultipartBody.Part  // Use "file" as the parameter name
+        @Part Image: MultipartBody.Part
     ): Response<UploadResponse>
 }
