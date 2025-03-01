@@ -12,8 +12,9 @@ import retrofit2.Response
 
 class HomeViewModel(private val repository: AuthRepository) : ViewModel() {
 
-    private val _uploadResponse = MutableLiveData<Response<UploadResponse>>()
-    val uploadResponse: LiveData<Response<UploadResponse>> get() = _uploadResponse
+    // Make LiveData nullable
+    private val _uploadResponse = MutableLiveData<Response<UploadResponse>?>()
+    val uploadResponse: LiveData<Response<UploadResponse>?> get() = _uploadResponse
 
     fun uploadImage(file: MultipartBody.Part) {
         viewModelScope.launch {
@@ -21,7 +22,7 @@ class HomeViewModel(private val repository: AuthRepository) : ViewModel() {
                 val response = repository.uploadImage(file)
                 _uploadResponse.value = response
             } catch (e: Exception) {
-                _uploadResponse.value = null
+                _uploadResponse.value = null // Now this is allowed
             }
         }
     }

@@ -11,108 +11,154 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-
         android:layout_height="match_parent">
 
-        <!-- Main Content -->
-
-        <!-- Bottom Navigation Bar -->
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/Main_home"
+        <!-- ScrollView to make the content scrollable -->
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/BackGround"
+            android:fillViewport="true">
 
-            android:padding="16dp">
-
-
-            <!-- App Title -->
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="VistaCure"
-                android:textColor="@color/DarkBlueMainTitle"
-                android:textSize="35sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Drawer Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/materialButtondrawer"
-                android:layout_width="53dp"
-                android:layout_height="53dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/profile"
-                android:contentDescription="user"
-                app:backgroundTint="@color/DarkBlueMainTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <!-- Eye Scanner Image -->
-
-            <!-- Browse Button -->
-            <ImageView
-                android:id="@+id/imageViewscanner"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="68dp"
-                android:contentDescription="Eye scanner"
-                android:src="@drawable/eye"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView11" />
-
-            <TextView
-                android:id="@+id/textView10"
+            <!-- Main Content -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/Main_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:fontFamily="@font/rasa"
-                android:gravity="center"
-                android:text="Upload a clear photo of your eye for detection"
-                android:textColor="@color/Text"
-                android:textSize="19dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewscanner">
+                android:background="@color/BackGround"
+                android:padding="16dp">
 
-            </TextView>
+                <!-- App Title -->
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="VistaCure"
+                    android:textColor="@color/DarkBlueMainTitle"
+                    android:textSize="35sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/browse"
-                android:layout_width="180dp"
-                android:layout_height="70dp"
-                android:backgroundTint="@color/DarkBlueMainTitle"
-                android:fontFamily="@font/rasa"
-                android:padding="16dp"
-                android:text="Browse"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10"
-                app:layout_constraintVertical_bias="0.066" />
+                <!-- Drawer Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/materialButtondrawer"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/profile"
+                    android:contentDescription="user"
+                    app:backgroundTint="@color/DarkBlueMainTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Progress Bar -->
+                <!-- Eye Scanner Image -->
 
+                <!-- Instruction Text -->
+                <ImageView
+                    android:id="@+id/imageViewscanner"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="40dp"
+                    android:contentDescription="Eye scanner"
+                    android:src="@drawable/eye"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView11" />
 
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="@font/rasa"
+                    android:gravity="center"
+                    android:text="Upload a clear photo of your eye for detection"
+                    android:textColor="@color/Text"
+                    android:textSize="19dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewscanner" />
 
+                <!-- Browse Button -->
+                <Button
+                    android:id="@+id/browse"
+                    android:layout_width="180dp"
+                    android:layout_height="70dp"
+                    android:backgroundTint="@color/DarkBlueMainTitle"
+                    android:fontFamily="@font/rasa"
+                    android:padding="16dp"
+                    android:text="Browse"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView10"
+                    app:layout_constraintVertical_bias="0.066" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Detection Result Box -->
+                <LinearLayout
+                    android:id="@+id/detection_result_box"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/custom_dialog_background"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/browse">
 
+                    <!-- Alert Icon -->
+                    <ImageView
+                        android:id="@+id/alert_icon"
+                        android:layout_width="34dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:src="@drawable/neweyelogo"
+                        tools:layout_editor_absoluteX="16dp"
+                        tools:layout_editor_absoluteY="451dp" />
+
+                    <!-- Alert Title -->
+                    <TextView
+                        android:id="@+id/alert_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Result"
+                        android:textColor="@color/blackQ"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:layout_editor_absoluteX="39dp"
+                        tools:layout_editor_absoluteY="437dp" />
+
+                    <!-- Detection Result Text -->
+                    <TextView
+                        android:id="@+id/detection_result"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="No image uploaded yet."
+                        android:textColor="@color/DarkBlueMainTitle"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             style="@style/CustomBottomNav"

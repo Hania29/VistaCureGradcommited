@@ -51,6 +51,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.navigationView.setNavigationItemSelectedListener { handleNavigation(it) }
         binding.bottomNavigationView.setOnItemSelectedListener { handleBottomNavigation(it) }
         binding.browse.setOnClickListener { openImagePicker() }
+
+        // Set default text for detection_result
+        binding.detectionResult.text = "No image uploaded yet."
     }
 
     private fun handleNavigation(menuItem: MenuItem): Boolean {
@@ -97,7 +100,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             } else {
                 "Image upload failed: ${response?.errorBody()?.string() ?: "Unknown error"}"
             }
-            showDetectionResultsDialog(message)
+
+            // Update the text of the detection_result TextView
+            binding.detectionResult.text = message
         }
     }
 
