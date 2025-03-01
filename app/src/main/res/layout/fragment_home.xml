@@ -13,13 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- ScrollView to make the content scrollable -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
 
-            <!-- Main Content -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/Main_home"
                 android:layout_width="match_parent"
@@ -27,7 +25,6 @@
                 android:background="@color/BackGround"
                 android:padding="16dp">
 
-                <!-- App Title -->
                 <TextView
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
@@ -42,7 +39,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Drawer Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/materialButtondrawer"
                     android:layout_width="53dp"
@@ -55,7 +51,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Eye Scanner Image -->
                 <ImageView
                     android:id="@+id/imageViewscanner"
                     android:layout_width="200dp"
@@ -68,7 +63,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView11" />
 
-                <!-- Instruction Text -->
                 <TextView
                     android:id="@+id/textView10"
                     android:layout_width="match_parent"
@@ -83,10 +77,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageViewscanner" />
-
-                <!-- Browse Button -->
-
-                <!-- Detection Result Box -->
 
                 <Button
                     android:id="@+id/browse"
@@ -118,9 +108,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/browse">
 
-                    <!-- Alert Icon (Eye Logo) -->
-
-                    <!-- Alert Title (Result) -->
 
                     <ImageView
                         android:id="@+id/alert_icon"
@@ -131,7 +118,6 @@
                         app:layout_constraintStart_toStartOf="@+id/detection_result"
                         app:layout_constraintTop_toTopOf="@+id/alert_title" />
 
-                    <!-- Detection Result Text -->
 
                     <TextView
                         android:id="@+id/alert_title"
@@ -170,7 +156,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             style="@style/CustomBottomNav"
@@ -186,7 +171,6 @@
             app:menu="@menu/bottom_nav_menu" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"

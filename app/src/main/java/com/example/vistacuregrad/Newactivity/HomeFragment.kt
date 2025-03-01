@@ -112,10 +112,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 "Image upload failed: ${errorBody ?: "Unknown error"}"
             }
 
-            // Update UI
             binding.detectionResult.text = message
 
-            // Save result in SharedPreferences
             saveDetectionResult(message)
         }
     }
