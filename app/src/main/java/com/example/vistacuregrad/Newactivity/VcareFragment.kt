@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vistacuregrad.Newactivity.Model.VcareItem
+import com.example.vistacuregrad.Newactivity.Model.EyeCareTip
 
 class VcareFragment : Fragment() {
     override fun onCreateView(
@@ -20,40 +20,36 @@ class VcareFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-
-
         val itemList = listOf(
-            VcareItem("How it Works?", isHeader = true),
-            VcareItem("Take a Clear Photo:", "Ensure the photo is well-lit and in focus."),
-            VcareItem("Upload Image:", "Select the 'Upload Image' button and choose the photo."),
-            VcareItem("Prediction:", "The app will analyze the uploaded image using AI."),
-            VcareItem("Results:", "The app will display a list of potential eye diseases, ranked by probability."),
+            EyeCareTip("Regular Eye Exams", "Schedule comprehensive eye exams at least once a year."),
+            EyeCareTip("Healthy Diet", "Eat leafy greens, fish, and citrus fruits for better eye health."),
+            EyeCareTip("Protect Your Eyes from the Sun", "Wear sunglasses with UVA and UVB protection."),
+            EyeCareTip("Avoid Smoking", "Smoking increases the risk of eye diseases like macular degeneration."),
+            EyeCareTip("Maintain a Healthy Weight", "Obesity can increase the risk of eye conditions."),
 
-            VcareItem("Disclaimer!", "This app provides a preliminary assessment. It is not a substitute for professional medical advice.", isDisclaimer = true),
+            EyeCareTip("Tips for Digital Eye Strain", isHeader = true),
+            EyeCareTip("Follow the 20-20-20 Rule", "Every 20 minutes, look at something 20 feet away for 20 seconds."),
+            EyeCareTip("Adjust Screen Brightness", "Reduce digital eye strain by using the right brightness settings."),
+            EyeCareTip("Take Regular Breaks", "Give your eyes a break every 30 minutes."),
+            EyeCareTip("Increase Text Size", "Larger text reduces strain on your eyes."),
+            EyeCareTip("Use a Blue Light Filter", "Enable blue light filter settings to reduce strain."),
 
-            VcareItem("Important Notes:", isHeader = true),
-            VcareItem("Accuracy:", "The accuracy of the predictions depends on the quality of the image and the complexity of the eye condition."),
-            VcareItem("Medical Consultation:", "The results provided by this app are for informational purposes only. Always consult with a qualified ophthalmologist for diagnosis and treatment."),
-            VcareItem("Data Privacy:", "We are committed to protecting your privacy. Uploaded images may be used to improve the accuracy of the app’s algorithms, but all personal information will be kept confidential."),
+            EyeCareTip("Additional Tips", isHeader = true),
+            EyeCareTip("Wear Protective Eyewear", "Use protective glasses while working with screens or in bright environments."),
+            EyeCareTip("Practice Good Contact Lens Hygiene", "Follow your doctor’s guidelines on cleaning contact lenses."),
+            EyeCareTip("Be Aware of Symptoms", "If you experience changes in vision, see an eye doctor immediately."),
 
-            VcareItem("Tips for Optimal Image Capture:", isHeader = true),
-            VcareItem("Good Lighting:", "Use natural light or bright, even artificial lighting. Avoid shadows."),
-            VcareItem("Clear Focus:", "Ensure the entire eye is in focus, including the pupil and surrounding areas."),
-            VcareItem("Straight Position:", "Keep the camera level with the eye to avoid distortion."),
-            VcareItem("Close-up:", "Take a close-up photo of the eye, but ensure the entire eye is visible."),
-
-            VcareItem("Disclaimer!", "This app is intended for informational purposes only and should not be considered a substitute for professional medical advice. Always consult with a qualified healthcare provider for any health concerns.", isDisclaimer = true)
+            EyeCareTip("Disclaimer!", "This information is not a substitute for professional medical advice. Always consult an eye specialist.", isDisclaimer = true)
         )
 
-        val adapter = VcareAdapter(itemList)
+        val adapter = EyeCareTipsAdapter(itemList)
         recyclerView.adapter = adapter
-
 
         val backButton: View = view.findViewById(R.id.btn_back)
         backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+
         return view
     }
-
 }

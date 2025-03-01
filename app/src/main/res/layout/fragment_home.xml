@@ -6,6 +6,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/BackGround"
     tools:context=".HomeFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -14,12 +15,17 @@
         android:layout_height="match_parent">
 
         <!-- Main Content -->
+
+        <!-- Bottom Navigation Bar -->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/Main_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/BackGround"
 
             android:padding="16dp">
+
 
             <!-- App Title -->
             <TextView
@@ -49,58 +55,75 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <!-- Eye Scanner Image -->
+
+            <!-- Browse Button -->
             <ImageView
                 android:id="@+id/imageViewscanner"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="68dp"
                 android:contentDescription="Eye scanner"
-                android:src="@drawable/eye_scanner"
+                android:src="@drawable/eye"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView11" />
 
-            <!-- Browse Button -->
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/rasa"
+                android:gravity="center"
+                android:text="Upload a clear photo of your eye for detection"
+                android:textColor="@color/Text"
+                android:textSize="19dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewscanner">
+
+            </TextView>
+
             <Button
                 android:id="@+id/browse"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="236dp"
+                android:layout_width="180dp"
+                android:layout_height="70dp"
                 android:backgroundTint="@color/DarkBlueMainTitle"
+                android:fontFamily="@font/rasa"
                 android:padding="16dp"
                 android:text="Browse"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageViewscanner" />
-
-            <!-- Progress Bar -->
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:textSize="25sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/browse" />
+                app:layout_constraintTop_toBottomOf="@+id/textView10"
+                app:layout_constraintVertical_bias="0.066" />
+
+            <!-- Progress Bar -->
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Bottom Navigation Bar -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
+            style="@style/CustomBottomNav"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="69dp"
             android:layout_gravity="bottom"
-            android:background="@color/white"
-            app:menu="@menu/bottom_nav_menu"
+            android:background="@color/bottomnav"
+            app:itemIconSize="25dp"
+            app:itemIconTint="@color/black"
+            app:itemRippleColor="@android:color/transparent"
+            app:itemTextColor="@color/DarkBlueMainTitle"
             app:labelVisibilityMode="labeled"
-            app:itemIconTint="@null"
-            app:itemTextColor="@color/drawer" />
+            app:menu="@menu/bottom_nav_menu" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- Navigation Drawer -->

@@ -12,6 +12,7 @@
 
     <!-- Bottom Navigation Bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@color/BackGround"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="70dp"> <!-- Adjust padding to prevent overlap with Bottom Navigation -->
@@ -64,13 +65,16 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
+        style="@style/CustomBottomNav"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="69dp"
         android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:menu="@menu/bottom_nav_menu"
+        android:background="@color/bottomnav"
+        app:itemIconSize="25dp"
+        app:itemIconTint="@color/black"
+        app:itemRippleColor="@android:color/transparent"
+        app:itemTextColor="@color/DarkBlueMainTitle"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@null"
-        app:itemTextColor="@color/drawer"/>
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

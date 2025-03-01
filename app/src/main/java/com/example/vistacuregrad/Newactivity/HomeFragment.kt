@@ -103,13 +103,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
     private fun uploadImage(file: File) {
-        binding.progressBar.visibility = View.VISIBLE
+
 
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val imagePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
         homeViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
-            binding.progressBar.visibility = View.GONE
+
             if (response != null && response.isSuccessful) {
                 val uploadResponse = response.body()
                 if (uploadResponse != null && uploadResponse.status == "Success") {

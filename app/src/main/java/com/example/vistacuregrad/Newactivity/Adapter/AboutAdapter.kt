@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vistacuregrad.Newactivity.Model.VcareItem
+import com.example.vistacuregrad.Newactivity.Model.AboutItem
 
-class VcareAdapter(private val itemList: List<VcareItem>) :
+class AboutAdapter(private val itemList: List<AboutItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -29,7 +29,7 @@ class VcareAdapter(private val itemList: List<VcareItem>) :
         return when (viewType) {
             TYPE_HEADER -> HeaderViewHolder(inflater.inflate(R.layout.item_header, parent, false))
             TYPE_DISCLAIMER -> DisclaimerViewHolder(inflater.inflate(R.layout.item_disclaimer, parent, false))
-            else -> ItemViewHolder(inflater.inflate(R.layout.item_vcare, parent, false))
+            else -> ItemViewHolder(inflater.inflate(R.layout.item_about, parent, false))
         }
     }
 
