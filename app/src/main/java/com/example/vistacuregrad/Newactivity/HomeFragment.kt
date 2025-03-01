@@ -98,7 +98,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     "Disease: ${results[0].diseaseName}\nProbability: ${results[0].probability}"
                 } else "No diseases detected"
             } else {
-                "Image upload failed: ${response?.errorBody()?.string() ?: "Unknown error"}"
+                val errorBody = response?.errorBody()?.string()
+                Log.e("UploadImage", "Error: $errorBody")
+                "Image upload failed: ${errorBody ?: "Unknown error"}"
             }
 
             // Update the text of the detection_result TextView

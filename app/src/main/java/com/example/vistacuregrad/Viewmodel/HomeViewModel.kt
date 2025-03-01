@@ -1,5 +1,6 @@
 package com.example.vistacuregrad.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,6 @@ import retrofit2.Response
 
 class HomeViewModel(private val repository: AuthRepository) : ViewModel() {
 
-    // Make LiveData nullable
     private val _uploadResponse = MutableLiveData<Response<UploadResponse>?>()
     val uploadResponse: LiveData<Response<UploadResponse>?> get() = _uploadResponse
 
@@ -22,7 +22,8 @@ class HomeViewModel(private val repository: AuthRepository) : ViewModel() {
                 val response = repository.uploadImage(file)
                 _uploadResponse.value = response
             } catch (e: Exception) {
-                _uploadResponse.value = null // Now this is allowed
+                Log.e("UploadImage", "Error uploading image: ${e.message}", e)
+                _uploadResponse.value = null
             }
         }
     }
