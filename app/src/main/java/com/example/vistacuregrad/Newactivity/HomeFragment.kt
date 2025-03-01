@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
@@ -38,64 +40,42 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val repository = AuthRepository(RetrofitClient.apiService)
         val factory = HomeViewModelFactory(repository)
-        homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
+        homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
         setupUI()
     }
 
     private fun setupUI() {
         binding.bottomNavigationView.itemIconTintList = null
-        binding.materialButtondrawer.setOnClickListener {
-            binding.drawerLayout.openDrawer(GravityCompat.START)
-        }
-        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
-            handleNavigation(menuItem)
-            true
-        }
-        binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            handleBottomNavigation(item)
-            true
-        }
-        binding.browse.setOnClickListener {
-            openImagePicker()
-        }
+        binding.materialButtondrawer.setOnClickListener { binding.drawerLayout.openDrawer(GravityCompat.START) }
+        binding.navigationView.setNavigationItemSelectedListener { handleNavigation(it) }
+        binding.bottomNavigationView.setOnItemSelectedListener { handleBottomNavigation(it) }
+        binding.browse.setOnClickListener { openImagePicker() }
     }
 
-    private fun handleNavigation(menuItem: MenuItem) {
-        val navController = findNavController()
-        when (menuItem.itemId) {
-            R.id.userDrawer -> navController.navigate(R.id.action_homeFragment_to_userDrawer)
-            R.id.medicalDrawer -> navController.navigate(R.id.action_homeFragment_to_medicalDrawer)
-            R.id.vcare -> navController.navigate(R.id.action_homeFragment_to_vcare)
-            R.id.about -> navController.navigate(R.id.action_homeFragment_to_about)
-            R.id.help -> navController.navigate(R.id.action_homeFragment_to_help)
-        }
+    private fun handleNavigation(menuItem: MenuItem): Boolean {
+        findNavController().navigate(menuItem.itemId)
         binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
-    private fun handleBottomNavigation(item: MenuItem) {
-        val navController = findNavController()
-        when (item.itemId) {
-            R.id.homeFragment -> navController.navigate(R.id.homeFragment)
-            R.id.chatBotFragment -> navController.navigate(R.id.action_homeFragment_to_chatBotFragment)
-            R.id.historyFragment -> navController.navigate(R.id.action_homeFragment_to_historyFragment)
-        }
+    private fun handleBottomNavigation(item: MenuItem): Boolean {
+        findNavController().navigate(item.itemId)
+        return true
     }
 
     private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK).apply {
-            type = "image/*"
-        }
+        val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
         imagePickerLauncher.launch(intent)
     }
 
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { uri ->
-                    getFileFromUri(requireContext(), uri)?.let { file ->
-                        uploadImage(file)
-                    }
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val uri = result.data!!.data
+                uri?.let {
+                    val file = getFileFromUri(requireContext(), it)
+                    file?.let { uploadImage(it) }
                 }
             } else {
                 Toast.makeText(requireContext(), "Image selection cancelled", Toast.LENGTH_SHORT).show()
@@ -103,44 +83,38 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
     private fun uploadImage(file: File) {
-
-
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
-
-        homeViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
-
-            if (response != null && response.isSuccessful) {
-                val uploadResponse = response.body()
-                if (uploadResponse != null && uploadResponse.status == "Success") {
-                    val diseaseResults = uploadResponse.results
-                    val message = if (diseaseResults.isNotEmpty()) {
-                        "Disease: ${diseaseResults[0].diseaseName}\nProbability: ${diseaseResults[0].probability}"
-                    } else {
-                        "No diseases detected"
-                    }
-                    showDetectionResultsDialog(message)
-                } else {
-                    showDetectionResultsDialog("Error: ${uploadResponse?.message}")
-                }
-            } else {
-                val errorMessage = response?.errorBody()?.string() ?: "Unknown error"
-                showDetectionResultsDialog("Image upload failed: $errorMessage")
-                Log.e("Upload", "Image upload failed: $errorMessage")
-            }
-        }
+        val imagePart = MultipartBody.Part.createFormData(
+            "file", file.name, file.asRequestBody("image/*".toMediaTypeOrNull())
+        )
 
         homeViewModel.uploadImage(imagePart)
+        homeViewModel.uploadResponse.observe(viewLifecycleOwner) { response ->
+            val message = if (response != null && response.isSuccessful) {
+                val results = response.body()?.results
+                if (!results.isNullOrEmpty()) {
+                    "Disease: ${results[0].diseaseName}\nProbability: ${results[0].probability}"
+                } else "No diseases detected"
+            } else {
+                "Image upload failed: ${response?.errorBody()?.string() ?: "Unknown error"}"
+            }
+            showDetectionResultsDialog(message)
+        }
     }
 
     private fun showDetectionResultsDialog(message: String) {
+        val dialogView = layoutInflater.inflate(R.layout.custom_alert_dialog, null)
         val alertDialog = AlertDialog.Builder(requireContext())
-            .setTitle("Detection Results")
-            .setMessage(message)
-            .setPositiveButton("Close") { dialog, _ ->
-                dialog.dismiss()
-            }
+            .setView(dialogView)
             .create()
+
+        val title = dialogView.findViewById<TextView>(R.id.alert_title)
+        val messageText = dialogView.findViewById<TextView>(R.id.alert_message)
+        val closeButton = dialogView.findViewById<Button>(R.id.alert_close)
+
+        title.text = "Result"
+        messageText.text = message
+
+        closeButton.setOnClickListener { alertDialog.dismiss() }
         alertDialog.show()
     }
 
@@ -157,5 +131,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Log.e("FileCreation", "Error creating file from URI: ${e.message}")
             null
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

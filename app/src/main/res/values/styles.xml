@@ -13,5 +13,9 @@
         <item name="android:color">@color/Blue</item> <!-- Change this to your desired color -->
     </style>
 
-
+    <style name="TransparentDialog">
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>
