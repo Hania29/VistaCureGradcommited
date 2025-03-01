@@ -62,7 +62,7 @@
                     android:layout_height="200dp"
                     android:layout_marginTop="40dp"
                     android:contentDescription="Eye scanner"
-                    android:src="@drawable/eye2"
+                    android:src="@drawable/eye1111"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.497"
                     app:layout_constraintStart_toStartOf="parent"
