@@ -43,17 +43,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
         setupUI()
+
+        // Restore detection result if navigating between fragments
+        if (savedInstanceState != null) {
+            savedInstanceState.getString("detection_result")?.let {
+                binding.detectionResult.text = it
+            }
+        } else {
+            // Use default message when the app is restarted
+            binding.detectionResult.text = getString(R.string.default_detection_message)
+        }
     }
 
     private fun setupUI() {
         binding.bottomNavigationView.itemIconTintList = null
-        binding.materialButtondrawer.setOnClickListener { binding.drawerLayout.openDrawer(GravityCompat.START) }
+        binding.materialButtondrawer.setOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
         binding.navigationView.setNavigationItemSelectedListener { handleNavigation(it) }
         binding.bottomNavigationView.setOnItemSelectedListener { handleBottomNavigation(it) }
         binding.browse.setOnClickListener { openImagePicker() }
-
-        // Set default text for detection_result
-        binding.detectionResult.text = "No image uploaded yet."
     }
 
     private fun handleNavigation(menuItem: MenuItem): Boolean {
@@ -103,9 +112,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 "Image upload failed: ${errorBody ?: "Unknown error"}"
             }
 
-            // Update the text of the detection_result TextView
+            // Update UI
             binding.detectionResult.text = message
+
+            // Save result in SharedPreferences
+            saveDetectionResult(message)
         }
+    }
+
+    private fun saveDetectionResult(result: String) {
+        val sharedPreferences = requireContext().getSharedPreferences("vistacure_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("detection_result", result).apply()
+    }
+
+    private fun getSavedDetectionResult(): String {
+        val sharedPreferences = requireContext().getSharedPreferences("vistacure_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("detection_result", getString(R.string.default_detection_message))
+            ?: getString(R.string.default_detection_message)
     }
 
     private fun showDetectionResultsDialog(message: String) {
@@ -137,6 +160,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         } catch (e: Exception) {
             Log.e("FileCreation", "Error creating file from URI: ${e.message}")
             null
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        _binding?.let {
+            outState.putString("detection_result", it.detectionResult.text.toString())
         }
     }
 
