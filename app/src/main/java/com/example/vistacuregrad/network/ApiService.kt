@@ -7,15 +7,19 @@ import com.example.vistacuregrad.model.OtpResponse
 import com.example.vistacuregrad.model.RegisterResponse
 import com.example.vistacuregrad.model.ResetPasswordResponse
 import com.example.vistacuregrad.model.UploadResponse
+import com.example.vistacuregrad.model.UserProfileLogResponse
 import com.example.vistacuregrad.model.UserProfileResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Query
 
@@ -87,4 +91,28 @@ interface ApiService {
     suspend fun uploadImage(
         @Part Image: MultipartBody.Part
     ): Response<UploadResponse>
+
+    @GET("api/Authentication/UserProfile")
+    suspend fun getUserProfileLog(
+        @Header("Authorization") token: String
+    ): Response<UserProfileLogResponse>
+
+    @Multipart
+    @PUT("api/Authentication/UpdateUserProfile")
+    suspend fun updateUserProfileLog(
+        @Header("Authorization") token: String,
+        @Part("FirstName") firstName: RequestBody?,
+        @Part("LastName") lastName: RequestBody?,
+        @Part("DateOfBirth") dateOfBirth: RequestBody?,
+        @Part("Height") height: RequestBody?,
+        @Part("Weight") weight: RequestBody?,
+        @Part("Gender") gender: RequestBody?
+    ): Response<UserProfileLogResponse>
+
+    @DELETE("api/Authentication/DeleteUserProfile")
+    suspend fun deleteUserProfileLog(
+        @Header("Authorization") token: String
+    ): Response<UserProfileLogResponse>
 }
+
+

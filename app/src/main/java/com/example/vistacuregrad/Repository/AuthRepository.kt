@@ -103,10 +103,35 @@ class AuthRepository(private val apiService: ApiService) {
             return apiService.uploadImage(file)
         }
 
+    suspend fun getUserProfileLog(token: String): Response<UserProfileLogResponse> {
+        return apiService.getUserProfileLog("Bearer $token")
+    }
 
+    suspend fun updateUserProfileLog(token: String, request: UserProfileLogRequest): Response<UserProfileLogResponse> {
+        val firstNameBody = request.firstName?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val lastNameBody = request.lastName?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val dateOfBirthBody = request.dateOfBirth?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val heightBody = request.height?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val weightBody = request.weight?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val genderBody = request.gender?.toRequestBody("text/plain".toMediaTypeOrNull())
 
+        return apiService.updateUserProfileLog(
+            token = "Bearer $token",
+            firstName = firstNameBody,
+            lastName = lastNameBody,
+            dateOfBirth = dateOfBirthBody,
+            height = heightBody,
+            weight = weightBody,
+            gender = genderBody
+        )
+    }
 
+    suspend fun deleteUserProfileLog(token: String): Response<UserProfileLogResponse> {
+        return apiService.deleteUserProfileLog("Bearer $token")
+    }
 }
+
+
 
 
 

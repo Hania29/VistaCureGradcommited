@@ -7,14 +7,28 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.vistacuregrad.databinding.FragmentUserDrawerBinding
+import com.example.vistacuregrad.Repository.AuthRepository
+import com.example.vistacuregrad.model.UserProfileLogData
+import com.example.vistacuregrad.viewmodel.UserProfileLogViewModel
+import com.example.vistacuregrad.viewmodel.UserProfileLogViewModelFactory
+import com.example.vistacuregrad.model.UserProfileLogRequest
+import com.example.vistacuregrad.network.RetrofitClient
 import java.util.regex.Pattern
 
 class UserDrawerFragment : Fragment(R.layout.fragment_user_drawer) {
 
     private var _binding: FragmentUserDrawerBinding? = null
     private val binding get() = _binding!!
+
+    // Initialize ViewModel
+    private val repository = AuthRepository(RetrofitClient.apiService)
+    private val viewModel: UserProfileLogViewModel by viewModels {
+        UserProfileLogViewModelFactory(repository, requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,16 +41,73 @@ class UserDrawerFragment : Fragment(R.layout.fragment_user_drawer) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Fetch user profile when the fragment is created
+        viewModel.getUserProfileLog()
+
+        // Observe the response
+        viewModel.profileLogResponse.observe(viewLifecycleOwner, Observer { response ->
+            if (response.isSuccessful) {
+                val profileData = response.body()?.data
+                // Update UI with profileData
+                updateUIWithProfileData(profileData)
+            } else {
+                // Handle error
+                Toast.makeText(context, "Failed to fetch profile: ${response.message()}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.btnNext.setOnClickListener {
             if (validateFields()) {
-                Toast.makeText(context, "All fields are valid.", Toast.LENGTH_SHORT).show()
+                // Create a UserProfileLogRequest object with the updated data
+                val updateRequest = UserProfileLogRequest(
+                    firstName = binding.firstnameUser.text.toString().trim(),
+                    lastName = binding.lastnameUser.text.toString().trim(),
+                    dateOfBirth = binding.editTextText7.text.toString().trim(),
+                    height = binding.editTextText9.text.toString().trim().toDoubleOrNull(),
+                    weight = binding.editTextText8.text.toString().trim().toDoubleOrNull(),
+                    gender = getSelectedGender()
+                )
+
+                // Update user profile
+                viewModel.updateUserProfileLog(updateRequest)
+
+                Toast.makeText(context, "Profile updated successfully.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, "Please fill all fields correctly.", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    // Update UI with fetched profile data
+    private fun updateUIWithProfileData(profileData: UserProfileLogData?) {
+        profileData?.let {
+            binding.firstnameUser.setText(it.firstName)
+            binding.lastnameUser.setText(it.lastName)
+            binding.editTextText7.setText(it.dateOfBirth)
+            binding.editTextText8.setText(it.weight.toString())
+            binding.editTextText9.setText(it.height.toString())
+            setSelectedGender(it.gender)
+        }
+    }
+
+    // Get selected gender from RadioGroup
+    private fun getSelectedGender(): String? {
+        return when (binding.Radiogender.checkedRadioButtonId) {
+            R.id.rbMale -> "Male"
+            R.id.rbFemale -> "Female"
+            else -> null
+        }
+    }
+
+    // Set selected gender in RadioGroup
+    private fun setSelectedGender(gender: String?) {
+        when (gender) {
+            "Male" -> binding.Radiogender.check(R.id.rbMale)
+            "Female" -> binding.Radiogender.check(R.id.rbFemale)
         }
     }
 
@@ -47,7 +118,6 @@ class UserDrawerFragment : Fragment(R.layout.fragment_user_drawer) {
         val birthday = binding.editTextText7.text.toString().trim()
         val weight = binding.editTextText8.text.toString().trim()
         val height = binding.editTextText9.text.toString().trim()
-        val gender = binding.drGender.text.toString().trim()
 
         var isValid = true
 
