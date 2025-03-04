@@ -104,7 +104,7 @@ class AuthRepository(private val apiService: ApiService) {
         }
 
     suspend fun getUserProfileLog(token: String): Response<UserProfileLogResponse> {
-        return apiService.getUserProfileLog("Bearer $token")
+        return apiService.getUserProfileLog("token")
     }
 
     suspend fun updateUserProfileLog(token: String, request: UserProfileLogRequest): Response<UserProfileLogResponse> {
@@ -116,7 +116,7 @@ class AuthRepository(private val apiService: ApiService) {
         val genderBody = request.gender?.toRequestBody("text/plain".toMediaTypeOrNull())
 
         return apiService.updateUserProfileLog(
-            token = "Bearer $token",
+            token = token,
             firstName = firstNameBody,
             lastName = lastNameBody,
             dateOfBirth = dateOfBirthBody,
@@ -127,7 +127,7 @@ class AuthRepository(private val apiService: ApiService) {
     }
 
     suspend fun deleteUserProfileLog(token: String): Response<UserProfileLogResponse> {
-        return apiService.deleteUserProfileLog("Bearer $token")
+        return apiService.deleteUserProfileLog("token")
     }
 }
 
